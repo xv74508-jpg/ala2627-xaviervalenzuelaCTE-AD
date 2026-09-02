@@ -18,11 +18,11 @@
 [data-theme="midnight"] {
   --bg:        #0f1420;   /* page background      */
   --surface:   #1a2131;   /* cards and boxes      */
-  --text:      #e9edf5;   /* main writing         */
+  --text:      #ced0d3;   /* main writing         */
   --muted:     #94a2bd;   /* quieter writing      */
-  --accent:    #4dd4ff;   /* buttons, highlights  */
+  --accent:    #2cbeeb;   /* buttons, highlights  */
   --accent-2:  #ffd166;   /* a second highlight   */
-  --line:      #2a3348;   /* borders              */
+  --line:      #303d5b;   /* borders              */
 }
 [data-theme="paper"] {
   --bg: #f6f5f1; --surface: #ffffff; --text: #16181d; --muted: #5d6470;
