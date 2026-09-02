@@ -58,7 +58,7 @@
 /* ── THE BASICS ────────────────────────────────────────────────────────────
    TODO 12 — Try changing --radius to 0 for sharp corners, or 24px for round. */
 
-:root { --radius: 14px; --pad: 20px; --max: 860px; }
+:root { --radius: 0px; --pad: 20px; --max: 860px; }
 
 * { box-sizing: border-box; }
 
