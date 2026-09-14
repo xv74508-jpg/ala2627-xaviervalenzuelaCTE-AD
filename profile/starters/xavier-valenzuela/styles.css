@@ -70,10 +70,11 @@ html {
 body {
   margin: 0;
   background: var(--bg);
+  background-color: var(--bg);
+  background-image: linear-gradient(135deg, var(--bg) 0%, var(--bg) 68%, var(--accent-soft) 68%, var(--accent-soft) 100%);
   color: var(--ink);
   font: var(--t-body)/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  background-image: linear-gradient(135deg, transparent 0 65%, color-mix(in srgb, var(--accent-soft) 18%, transparent) 65% 100%)
+  -webkit-font-smoothing: antialiased
 }
 
 .wrap {
@@ -132,7 +133,8 @@ h1 {
   line-height: 1;
   letter-spacing: -.025em;
   margin: 0 0 var(--s-3);
-  font-weight: 800
+  font-weight: 800;
+  color: var(--accent-strong)
 }
 
 .tagline {
@@ -191,14 +193,14 @@ main {
 
 section {
   padding: var(--s-4) 0;
-  border-top: 1px solid var(--line)
+  border-top: 3px solid var(--accent)
 }
 
 h2 {
   font-size: var(--t-small);
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--faint);
+  color: var(--accent-strong);
   margin: 0 0 var(--s-3);
   font-weight: 700
 }
