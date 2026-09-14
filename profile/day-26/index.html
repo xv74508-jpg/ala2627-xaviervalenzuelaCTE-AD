@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App Design 2 &middot; Thu &mdash; Movement that earns its place</title>
+<link rel="stylesheet" href="../../../assets/ala.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--ss-void);color:var(--ss-bone);font:16px/1.65 var(--ss-body);padding:0 0 5rem}
+.wrap{max-width:56rem;margin:0 auto;padding:0 1.15rem}
+a.back{display:inline-block;margin:1.3rem 0 0;font-family:var(--ss-display);text-transform:uppercase;
+ letter-spacing:.2em;font-size:.7rem;color:var(--ala-red);text-decoration:none}
+.mast{position:relative;overflow:hidden;border-bottom:3px solid var(--ala-red);padding:1.5rem 0 2rem;
+ margin:0 0 2rem;background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.012))}
+.mast::before{content:"";position:absolute;right:-3%;top:-30%;width:34%;height:180%;
+ background:url('../../../assets/ala-monogram.png') no-repeat center/contain;opacity:.05}
+.mast .wrap{position:relative;z-index:1}
+.d{font-family:var(--ss-display);text-transform:uppercase;letter-spacing:.28em;font-size:.7rem;
+ color:var(--ala-red);margin:1rem 0 .5rem}
+h1{font-family:var(--ss-display);text-transform:uppercase;font-weight:500;
+ font-size:clamp(1.6rem,4.6vw,2.9rem);line-height:1.02;letter-spacing:.02em;margin:0 0 .5rem}
+.slo{font-family:'Aleo',Georgia,serif;color:var(--ala-steel);margin:0;max-width:42rem;
+ font-size:clamp(1rem,1.7vw,1.15rem)}
+h2{font-family:var(--ss-display);text-transform:uppercase;letter-spacing:.24em;font-size:.74rem;
+ color:var(--ala-steel-dim);margin:2rem 0 .9rem;display:flex;align-items:center;gap:.9rem}
+h2::after{content:"";flex:1;height:1px;background:var(--ala-navy-athletic)}
+.why{border:1px solid var(--ala-navy-athletic);border-left:3px solid var(--ala-silver);
+ border-radius:13px;padding:1rem 1.15rem;color:var(--ala-steel);font-size:.97rem}
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:0}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2.1rem 1fr;gap:.9rem;
+ padding:.85rem 0;border-bottom:1px solid var(--ala-navy-athletic)}
+ol.steps li:last-child{border-bottom:0}
+ol.steps li::before{content:counter(s);font-family:var(--ss-display);font-size:1.2rem;
+ color:var(--ala-red);line-height:1.25}
+ol.steps b{display:block;margin-bottom:.15rem}
+ol.steps em{font-style:normal;color:var(--ala-steel-dim);font-size:.93rem}
+.check{border:1px solid var(--ala-navy-athletic);border-left:3px solid var(--ala-red);
+ border-radius:13px;padding:1rem 1.15rem;color:var(--ala-paper);font-size:.95rem}
+.nav{display:flex;justify-content:space-between;gap:1rem;margin-top:2.4rem;padding-top:1.1rem;
+ border-top:1px solid var(--ala-navy-athletic)}
+.nav a{font-family:var(--ss-display);text-transform:uppercase;letter-spacing:.16em;font-size:.68rem;
+ color:var(--ala-silver);text-decoration:none}
+.nav a:hover{color:var(--ala-red)}
+</style>
+</head>
+<body>
+<header class="mast"><div class="wrap">
+  <a class="back" href="../">&larr; Week 7</a>
+  <p class="d">Thu 10 September &middot; Day 26</p>
+  <h1>Movement that earns its place</h1>
+  <p class="slo">Add motion that helps someone read the page, and nothing that makes them wait.</p>
+</div></header>
+<div class="wrap">
+  <h2>Why this day exists</h2>
+  <div class="why">Movement is where a professional page and an amateur one separate fastest. The test is not whether it looks cool &mdash; it is whether removing it would make the page harder to use. Anything that fails that test comes out.</div>
+  <h2>What you do</h2>
+  <ol class="steps">
+    <li><span><b>States first</b><em>Every clickable thing gets :hover and :focus-visible. Not decoration &mdash; the page telling someone what it does.</em></span></li>
+    <li><span><b>One considered reveal</b><em>Read the example&rsquo;s scroll reveal. Twelve lines, commented. Notice it only hides content once it knows it can show it again.</em></span></li>
+    <li><span><b>Respect the setting</b><em>Wrap it in prefers-reduced-motion. Some people are made ill by movement on a screen. This is not optional politeness.</em></span></li>
+    <li><span><b>Take one thing out</b><em>Whatever you added that you like most: remove it and reload. If the page is no worse, leave it out.</em></span></li>
+  </ol>
+  <h2>Done when</h2>
+  <div class="check">Hover and focus on everything clickable, at most one reveal, switched off under reduced motion.</div>
+  <div class="nav"><a href="../day-25/">&larr; Wed</a><a href="../day-27/">Fri &rarr;</a></div>
+</div>
+</body>
+</html>
