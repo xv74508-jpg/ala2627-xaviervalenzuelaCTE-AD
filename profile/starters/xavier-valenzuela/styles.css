@@ -10,7 +10,7 @@
    Read this file top to bottom. It is meant to be read.
    ========================================================================= */
 
-:root{
+:root {
   /* type — four sizes, nothing else */
   --t-hero: clamp(2.4rem, 7vw, 4.6rem);
   --t-head: clamp(1.15rem, 2vw, 1.4rem);
@@ -18,72 +18,289 @@
   --t-small: .86rem;
 
   /* space — five values, nothing else */
-  --s-1: 4px;  --s-2: 8px;  --s-3: 16px;  --s-4: 32px;  --s-5: 64px;
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 16px;
+  --s-4: 32px;
+  --s-5: 64px;
 
-  --ink:#12161d; --soft:#4a5460; --faint:#8b95a3;
-  --line:#e3e6ea; --bg:#fbfbfc; --card:#fff; --accent:#b8202f;
-}
-@media (prefers-color-scheme: dark){
-  :root{--ink:#eef1f5; --soft:#aeb8c5; --faint:#77818f;
-        --line:#232a34; --bg:#0e1116; --card:#151a21; --accent:#ff5468}
+  --ink: #18211a;
+  --soft: #536257;
+  --faint: #718177;
+  --line: #d5e5d2;
+  --bg: #f4f8ed;
+  --card: #ffffff;
+  --accent: #e05a2a;
+  --accent-strong: #a92f4a;
+  --accent-soft: #ffe16a;
 }
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);
-  font:var(--t-body)/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  -webkit-font-smoothing:antialiased}
-.wrap{max-width:56rem;margin:0 auto;padding:0 var(--s-3)}
-a{color:inherit}
+:root[data-theme="sunset"] {
+  --ink: #2d1720;
+  --soft: #79515a;
+  --faint: #986e73;
+  --line: #f0c8b5;
+  --bg: #fff4e9;
+  --card: #fffdf9;
+  --accent: #ef4f35;
+  --accent-strong: #a82759;
+  --accent-soft: #ffc857;
+}
+
+:root[data-theme="ocean"] {
+  --ink: #102b3b;
+  --soft: #416979;
+  --faint: #6f8d98;
+  --line: #b9e0e4;
+  --bg: #ecfbfa;
+  --card: #ffffff;
+  --accent: #007f86;
+  --accent-strong: #1454a3;
+  --accent-soft: #f7c948;
+}
+
+* {
+  box-sizing: border-box
+}
+
+html {
+  scroll-behavior: smooth
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: var(--t-body)/1.65 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-image: linear-gradient(135deg, transparent 0 65%, color-mix(in srgb, var(--accent-soft) 18%, transparent) 65% 100%)
+}
+
+.wrap {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 0 var(--s-3)
+}
+
+a {
+  color: inherit
+}
 
 /* ── the one piece of movement, and it earns its place ─────────────────────
    Sections fade up as they arrive. It gives the page a reading order and it
    costs nothing — and it is switched off entirely for anyone who has asked
    their machine for less motion. That switch is not optional politeness. */
-.rise{opacity:0;transform:translateY(14px);
-  transition:opacity .5s ease, transform .5s cubic-bezier(.2,.7,.3,1)}
-.rise.in{opacity:1;transform:none}
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto}
-  .rise{opacity:1;transform:none;transition:none}
+.rise {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.2, .7, .3, 1)
+}
+
+.rise.in {
+  opacity: 1;
+  transform: none
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto
+  }
+
+  .rise {
+    opacity: 1;
+    transform: none;
+    transition: none
+  }
 }
 
 /* ── header ──────────────────────────────────────────────────────────────── */
-header{padding:var(--s-5) 0 var(--s-4)}
-.eyebrow{font-size:var(--t-small);letter-spacing:.18em;text-transform:uppercase;
-  color:var(--accent);font-weight:700;margin:0 0 var(--s-2)}
-h1{font-size:var(--t-hero);line-height:1;letter-spacing:-.025em;margin:0 0 var(--s-3);
-  font-weight:800}
-.tagline{font-size:var(--t-head);color:var(--soft);margin:0;max-width:34rem}
+header {
+  padding: var(--s-5) 0 var(--s-4)
+}
+
+.eyebrow {
+  font-size: var(--t-small);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin: 0 0 var(--s-2)
+}
+
+h1 {
+  font-size: var(--t-hero);
+  line-height: 1;
+  letter-spacing: -.025em;
+  margin: 0 0 var(--s-3);
+  font-weight: 800
+}
+
+.tagline {
+  font-size: var(--t-head);
+  color: var(--soft);
+  margin: 0;
+  max-width: 34rem
+}
+
+.theme-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+  flex-wrap: wrap
+}
+
+.theme-picker span {
+  font-size: var(--t-small);
+  font-weight: 700;
+  color: var(--soft);
+  margin-right: var(--s-1)
+}
+
+.theme-button {
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--t-small);
+  font-weight: 700;
+  padding: 6px 13px;
+  transition: background .15s ease, color .15s ease, border-color .15s ease
+}
+
+.theme-button:hover,
+.theme-button.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff
+}
+
+.theme-button:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 3px
+}
 
 /* ── section rhythm ──────────────────────────────────────────────────────── */
-section{padding:var(--s-4) 0;border-top:1px solid var(--line)}
-h2{font-size:var(--t-small);letter-spacing:.18em;text-transform:uppercase;
-  color:var(--faint);margin:0 0 var(--s-3);font-weight:700}
-p{margin:0 0 var(--s-3)}
-p:last-child{margin-bottom:0}
+main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--s-5)
+}
+
+section {
+  padding: var(--s-4) 0;
+  border-top: 1px solid var(--line)
+}
+
+h2 {
+  font-size: var(--t-small);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 0 0 var(--s-3);
+  font-weight: 700
+}
+
+p {
+  margin: 0 0 var(--s-3)
+}
+
+p:last-child {
+  margin-bottom: 0
+}
 
 /* ── what I build ────────────────────────────────────────────────────────── */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:var(--s-3)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;
-  padding:var(--s-3)}
-.card h3{font-size:var(--t-body);margin:0 0 var(--s-2);font-weight:700}
-.card p{font-size:var(--t-small);color:var(--soft);margin:0}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--s-3)
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: var(--s-3)
+}
+
+.card h3 {
+  font-size: var(--t-body);
+  margin: 0 0 var(--s-2);
+  font-weight: 700
+}
+
+.card p {
+  font-size: var(--t-small);
+  color: var(--soft);
+  margin: 0
+}
 
 /* ── the list rows ───────────────────────────────────────────────────────── */
-.row{display:flex;gap:var(--s-3);padding:var(--s-3) 0;border-bottom:1px solid var(--line);
-  align-items:baseline;flex-wrap:wrap}
-.row:last-child{border-bottom:0}
-.row .when{font-size:var(--t-small);color:var(--faint);min-width:7rem;font-variant-numeric:tabular-nums}
-.row .what{flex:1;min-width:14rem}
-.row .what b{display:block}
-.row .what span{font-size:var(--t-small);color:var(--soft)}
+.row {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-3) 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+  flex-wrap: wrap
+}
+
+.row:last-child {
+  border-bottom: 0
+}
+
+.row .when {
+  font-size: var(--t-small);
+  color: var(--faint);
+  min-width: 7rem;
+  font-variant-numeric: tabular-nums
+}
+
+.row .what {
+  flex: 1;
+  min-width: 14rem
+}
+
+.row .what b {
+  display: block
+}
+
+.row .what span {
+  font-size: var(--t-small);
+  color: var(--soft)
+}
 
 /* ── contact ─────────────────────────────────────────────────────────────── */
-.contact a{display:inline-block;margin:0 var(--s-3) var(--s-2) 0;font-weight:700;
-  text-decoration:none;border-bottom:2px solid var(--accent);padding-bottom:2px;
-  transition:color .15s ease, border-color .15s ease}
-.contact a:hover{color:var(--accent)}
-.contact a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:3px}
+.contact a {
+  display: inline-block;
+  margin: 0 var(--s-3) var(--s-2) 0;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+  transition: color .15s ease, border-color .15s ease
+}
 
-footer{padding:var(--s-4) 0 var(--s-5);color:var(--faint);font-size:var(--t-small)}
+.contact a:hover {
+  color: var(--accent)
+}
+
+.contact a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px
+}
+
+footer {
+  padding: var(--s-4) 0 var(--s-5);
+  color: var(--faint);
+  font-size: var(--t-small)
+}
+
+@media (max-width: 42rem) {
+  main {
+    display: block
+  }
+}
