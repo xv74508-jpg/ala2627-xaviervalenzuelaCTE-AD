@@ -1,138 +1,529 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>App Design 2 · Week 7 — The profile page</title>
-<link rel="stylesheet" href="../../assets/ala.css">
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:var(--ss-void);color:var(--ss-bone);font:16px/1.65 var(--ss-body);padding:0 0 5rem}
-.wrap{max-width:64rem;margin:0 auto;padding:0 1.15rem}
-a.back{display:inline-block;margin:1.3rem 0 0;font-family:var(--ss-display);text-transform:uppercase;
- letter-spacing:.2em;font-size:.7rem;color:var(--ala-red);text-decoration:none}
-.mast{position:relative;overflow:hidden;border-bottom:3px solid var(--ala-red);padding:1.6rem 0 2.2rem;
- margin:0 0 2rem;background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.012))}
-.mast::before{content:"";position:absolute;right:-3%;top:-30%;width:36%;height:180%;
- background:url('../../assets/ala-monogram.png') no-repeat center/contain;opacity:.055}
-.mast .wrap{position:relative;z-index:1}
-.wk{font-family:var(--ss-display);text-transform:uppercase;letter-spacing:.28em;font-size:.7rem;
- color:var(--ala-red);margin:1.1rem 0 .55rem}
-h1{font-family:var(--ss-display);text-transform:uppercase;font-weight:500;
- font-size:clamp(1.8rem,5.2vw,3.2rem);line-height:1;letter-spacing:.02em;margin:0 0 .5rem}
-.lede{font-family:'Aleo',Georgia,serif;color:var(--ala-steel);margin:0;max-width:44rem;
- font-size:clamp(1rem,1.8vw,1.18rem)}
-h2.sec{font-family:var(--ss-display);text-transform:uppercase;letter-spacing:.24em;font-size:.74rem;
- color:var(--ala-steel-dim);margin:2.2rem 0 1rem;display:flex;align-items:center;gap:.9rem}
-h2.sec::after{content:"";flex:1;height:1px;background:var(--ala-navy-athletic)}
-.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(15.5rem,1fr));gap:11px}
-.day{border:1px solid var(--ala-navy-athletic);border-left:3px solid var(--ala-red);border-radius:14px;
- padding:1rem 1.1rem 1.1rem;background:rgba(255,255,255,.022)}
-.day .d{font-family:var(--ss-mono);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;
- color:var(--ala-red);font-weight:700;margin:0 0 .4rem}
-.day h3{font-size:1.02rem;margin:0 0 .3rem;line-height:1.25}
-.day p{margin:0;font-size:.87rem;color:var(--ala-steel-dim)}
-#modes{display:grid;gap:9px}
-.md{display:flex;align-items:center;gap:1rem;border:1px solid var(--ala-navy-athletic);
- border-radius:12px;padding:.75rem .95rem;background:rgba(255,255,255,.022)}
-.md > div{flex:1;display:flex;align-items:baseline;gap:.8rem;flex-wrap:wrap}
-.md-k{font-family:var(--ss-mono);font-weight:700;font-size:.86rem;letter-spacing:.1em;color:var(--ala-red)}
-.md-t{color:var(--ala-steel);font-size:.92rem}
-.md-b{cursor:pointer;font-family:var(--ss-display);text-transform:uppercase;letter-spacing:.14em;
- font-size:.66rem;color:var(--ala-silver);background:transparent;border:1px solid var(--ala-navy-athletic);
- border-radius:7px;padding:.45rem .75rem;white-space:nowrap}
-.md-b:hover{border-color:var(--ala-red);color:var(--ala-red)}
-.md-b.ok{background:var(--ala-red);border-color:var(--ala-red);color:#fff}
-.note{border:1px solid var(--ala-navy-athletic);border-left:3px solid var(--ala-silver);
- border-radius:13px;padding:1rem 1.15rem;color:var(--ala-steel);font-size:.94rem;margin:1rem 0 0}
-.note b{color:var(--ala-paper)}
-.term{border:1px solid var(--ala-navy-athletic);border-radius:14px;overflow:hidden;margin:0 0 1rem}
-.term .bar{background:rgba(255,255,255,.04);padding:.55rem .95rem;font-family:var(--ss-mono);
- font-size:.71rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ala-steel-dim);
- border-bottom:1px solid var(--ala-navy-athletic)}
-.term pre{margin:0;padding:1rem 1.1rem;background:#050D1B;overflow-x:auto;
- font:.85rem/1.7 var(--ss-mono);color:var(--ala-paper)}
-.term .c{color:var(--ala-steel-dim)}.term .hl{color:var(--ala-red);font-weight:700}
-footer{margin-top:2.6rem;padding-top:1.1rem;border-top:1px solid var(--ala-navy-athletic);
- color:var(--ala-steel-dim);font-size:.83rem}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>App Design 2 · Week 7 — The profile page</title>
+  <style>
+    :root {
+      --ink: #f4f1e9;
+      --muted: #aeb6c2;
+      --dim: #748095;
+      --bg: #08111f;
+      --panel: #101c2c;
+      --line: #24344b;
+      --accent: #f04a4f;
+      --accent-soft: #ff7a6f;
+      --display: "Trebuchet MS", sans-serif;
+      --body: Georgia, "Times New Roman", serif;
+      --mono: "Courier New", monospace
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.65 var(--body);
+      padding: 0 0 5rem
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+      background: radial-gradient(circle at 86% 8%, rgba(240, 74, 79, .12), transparent 24rem),
+        linear-gradient(135deg, #08111f 0%, #0d1929 55%, #111725 100%)
+    }
+
+    .wrap {
+      max-width: 68rem;
+      margin: 0 auto;
+      padding: 0 1.5rem
+    }
+
+    a {
+      color: inherit
+    }
+
+    a:focus-visible,
+    .md-b:focus-visible {
+      outline: 2px solid var(--accent-soft);
+      outline-offset: 4px
+    }
+
+    a.back {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      margin: 1.3rem 0 0;
+      font: 700 .68rem var(--display);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--accent-soft);
+      text-decoration: none
+    }
+
+    .mast {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      padding: 1rem 0 3.8rem;
+      margin: 0 0 2rem;
+      background: linear-gradient(110deg, rgba(255, 255, 255, .035), transparent 62%)
+    }
+
+    .mast::after {
+      position: absolute;
+      right: 7%;
+      bottom: -4rem;
+      width: 12rem;
+      height: 12rem;
+      border: 1px solid rgba(240, 74, 79, .3);
+      border-radius: 50%;
+      content: "";
+      box-shadow: 0 0 0 1rem rgba(240, 74, 79, .035), 0 0 0 2rem rgba(240, 74, 79, .025)
+    }
+
+    .mast .wrap {
+      position: relative;
+      z-index: 1
+    }
+
+    .mast-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 12rem;
+      gap: 3rem;
+      align-items: end
+    }
+
+    .wk {
+      margin: 3.2rem 0 .7rem;
+      color: var(--accent-soft);
+      font: 700 .7rem var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase
+    }
+
+    h1 {
+      max-width: 44rem;
+      margin: 0 0 .85rem;
+      font: 700 clamp(2.5rem, 7vw, 5.8rem)/.92 var(--display);
+      letter-spacing: -.045em;
+      text-transform: uppercase
+    }
+
+    .lede {
+      max-width: 43rem;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 1.7vw, 1.2rem)
+    }
+
+    .hero-meta {
+      border-left: 1px solid var(--accent);
+      padding: 0 0 0 1rem;
+      color: var(--muted);
+      font: .72rem/1.5 var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .08em
+    }
+
+    .hero-meta strong {
+      display: block;
+      margin-top: .25rem;
+      color: var(--ink);
+      font: 700 1.55rem/1 var(--display);
+      letter-spacing: 0
+    }
+
+    h2.sec {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2.8rem 0 1rem;
+      color: var(--dim);
+      font: 700 .7rem var(--display);
+      letter-spacing: .2em;
+      text-transform: uppercase
+    }
+
+    h2.sec::after {
+      height: 1px;
+      flex: 1;
+      background: var(--line);
+      content: ""
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr));
+      gap: 1rem
+    }
+
+    .day {
+      position: relative;
+      display: block;
+      min-height: 12.5rem;
+      padding: 1.2rem 1.25rem 1.3rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: rgba(16, 28, 44, .78);
+      text-decoration: none;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease
+    }
+
+    .day::after {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+      color: var(--accent);
+      content: "↗";
+      font: 1.1rem var(--mono)
+    }
+
+    .day:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      background: #142238
+    }
+
+    .day .d {
+      margin: 0 0 .65rem;
+      color: var(--accent-soft);
+      font: 700 .68rem var(--mono);
+      letter-spacing: .13em;
+      text-transform: uppercase
+    }
+
+    .day h3 {
+      max-width: 17rem;
+      margin: 0 0 .5rem;
+      font: 700 1.05rem/1.2 var(--display)
+    }
+
+    .day p {
+      max-width: 27rem;
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    .day p:last-child {
+      padding-right: 1.2rem
+    }
+
+    #modes {
+      display: grid;
+      gap: .65rem
+    }
+
+    .md {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: rgba(16, 28, 44, .72)
+    }
+
+    .md>div {
+      display: flex;
+      align-items: baseline;
+      flex: 1;
+      gap: .9rem;
+      flex-wrap: wrap
+    }
+
+    .md-k {
+      color: var(--accent-soft);
+      font: 700 .82rem var(--mono);
+      letter-spacing: .1em
+    }
+
+    .md-t {
+      color: var(--muted);
+      font-size: .94rem
+    }
+
+    .md-b {
+      cursor: pointer;
+      padding: .48rem .8rem;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: transparent;
+      color: var(--ink);
+      font: 700 .64rem var(--display);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: .2s ease
+    }
+
+    .md-b:hover,
+    .md-b.ok {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff
+    }
+
+    .md-b.ok::after {
+      content: " ✓"
+    }
+
+    .note {
+      margin: 1rem 0 0;
+      padding: 1rem 1.15rem;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      color: var(--muted);
+      font-size: .94rem;
+      background: rgba(16, 28, 44, .5)
+    }
+
+    .note b {
+      color: var(--ink)
+    }
+
+    .term {
+      margin: 0 0 1rem;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 4px
+    }
+
+    .term .bar {
+      padding: .6rem 1rem;
+      border-bottom: 1px solid var(--line);
+      background: #142238;
+      color: var(--dim);
+      font: 700 .67rem var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase
+    }
+
+    .term pre {
+      margin: 0;
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      background: #050b14;
+      color: var(--ink);
+      font: .84rem/1.7 var(--mono)
+    }
+
+    .term .c {
+      color: var(--dim)
+    }
+
+    .term .hl {
+      color: var(--accent-soft);
+      font-weight: 700
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--line);
+      color: var(--dim);
+      font-size: .82rem
+    }
+
+    @media (max-width:40rem) {
+      .wrap {
+        padding: 0 1rem
+      }
+
+      .mast {
+        padding-bottom: 2.8rem
+      }
+
+      .mast-grid {
+        display: block
+      }
+
+      .hero-meta {
+        margin-top: 1.6rem
+      }
+
+      .wk {
+        margin-top: 2.5rem
+      }
+
+      .day {
+        min-height: 0
+      }
+
+      .md {
+        align-items: flex-start
+      }
+
+      .md-b {
+        align-self: center
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html {
+        scroll-behavior: auto
+      }
+
+      .day,
+      .md-b {
+        transition: none
+      }
+
+      .day:hover {
+        transform: none
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header class="mast"><div class="wrap">
-  <a class="back" href="../">&larr; App Design 2</a>
-  <p class="wk">App Design 2 &middot; Week 7 &middot; 8&ndash;11 September</p>
-  <h1>The profile page</h1>
-  <p class="lede">You already have <i>This Is Me</i>. This week you build the professional one &mdash;
-  the front door of a portfolio that will hold everything you code this year. Not less creative.
-  More deliberate: movement, style, and a page that holds together.</p>
-</div></header>
+  <header class="mast">
+    <div class="wrap">
+      <a class="back" href="../">&larr; App Design 2</a>
+      <div class="mast-grid">
+        <div class="hero-copy">
+          <p class="wk">App Design 2 &middot; Week 7 &middot; 8&ndash;11 September</p>
+          <h1>The profile page</h1>
+          <p class="lede">You already have <i>This Is Me</i>. This week you build the professional one &mdash;
+            the front door of a portfolio that will hold everything you code this year. Not less creative.
+            More deliberate: movement, style, and a page that holds together.</p>
+        </div>
+        <p class="hero-meta">A four-day build<br><strong>01&ndash;04</strong><br>Write. Shape. Move. Ship.</p>
+      </div>
+    </div>
+  </header>
 
-<div class="wrap">
-  <h2 class="sec">The four days</h2>
-  <div class="days">
-    <a class="day" href="day-24/" style="text-decoration:none;color:inherit"><p class="d">Tue 8 Sep</p><h3>The content, before any of the styling</h3>
-      <p>Who you are, what you can build, what you have made, how to reach you. Written plain and
-      true first &mdash; you cannot design your way out of having nothing to say.</p></a>
-    <a class="day" href="day-25/" style="text-decoration:none;color:inherit"><p class="d">Wed 9 Sep</p><h3>Structure and type</h3>
-      <p>One type scale, one spacing scale, clear sections. Coherence is a small number of
-      decisions used everywhere, not a lot of decisions made once each.</p></a>
-    <a class="day" href="day-26/" style="text-decoration:none;color:inherit"><p class="d">Thu 10 Sep</p><h3>Movement that earns its place</h3>
-      <p>States, transitions, one considered reveal. Motion that helps someone read the page
-      &mdash; and nothing that makes them wait.</p></a>
-    <a class="day" href="day-27/" style="text-decoration:none;color:inherit"><p class="d">Fri 11 Sep</p><h3>The coherence pass, then ship</h3>
-      <p>Read it as a stranger. Does it hold together, does it sound like you, would you send
-      this link to someone who might hire you? Then publish.</p></a>
-  </div>
+  <div class="wrap">
+    <h2 class="sec">The four days</h2>
+    <div class="days">
+      <a class="day" href="day-24/">
+        <p class="d">Tue 8 Sep</p>
+        <h3>The content, before any of the styling</h3>
+        <p>Who you are, what you can build, what you have made, how to reach you. Written plain and
+          true first &mdash; you cannot design your way out of having nothing to say.</p>
+      </a>
+      <a class="day" href="day-25/">
+        <p class="d">Wed 9 Sep</p>
+        <h3>Structure and type</h3>
+        <p>One type scale, one spacing scale, clear sections. Coherence is a small number of
+          decisions used everywhere, not a lot of decisions made once each.</p>
+      </a>
+      <a class="day" href="day-26/">
+        <p class="d">Thu 10 Sep</p>
+        <h3>Movement that earns its place</h3>
+        <p>States, transitions, one considered reveal. Motion that helps someone read the page
+          &mdash; and nothing that makes them wait.</p>
+      </a>
+      <a class="day" href="day-27/">
+        <p class="d">Fri 11 Sep</p>
+        <h3>The coherence pass, then ship</h3>
+        <p>Read it as a stranger. Does it hold together, does it sound like you, would you send
+          this link to someone who might hire you? Then publish.</p>
+      </a>
+    </div>
 
-  <h2 class="sec">The agent — five words</h2>
-  <p style="color:var(--ala-steel);margin:0 0 1rem">Start a message with one of these and the agent
-  works that way for the reply. You are choosing how much of the thinking you keep.</p>
-  <div id="modes"></div>
-  <div class="note"><b>DEBUG is the one to reach for.</b> Finding a bug is the skill; typing the fix
-  is not. That mode will help you narrow it down and will refuse to hand you the answer &mdash; on
-  purpose, even if you ask it twice.</div>
+    <h2 class="sec">The agent — five words</h2>
+    <p style="color:var(--ala-steel);margin:0 0 1rem">Start a message with one of these and the agent
+      works that way for the reply. You are choosing how much of the thinking you keep.</p>
+    <div id="modes"></div>
+    <div class="note"><b>DEBUG is the one to reach for.</b> Finding a bug is the skill; typing the fix
+      is not. That mode will help you narrow it down and will refuse to hand you the answer &mdash; on
+      purpose, even if you ask it twice.</div>
 
-  <h2 class="sec">What you are aiming at</h2>
-  <div class="days" style="grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))">
-    <a class="day" href="example/" style="text-decoration:none;color:inherit">
-      <p class="d">The example</p><h3>Mr. Sharp&rsquo;s profile</h3>
-      <p>Built for this week so there is something to look at. Read the stylesheet &mdash; it is
-      commented and it is the whole system in 90 lines.</p></a>
-    <a class="day" href="starters/" style="text-decoration:none;color:inherit">
-      <p class="d">Your starter</p><h3>Your own words, carried over</h3>
-      <p>Everything you wrote on <i>This Is Me</i> is already in it. Not a blank file and not
-      finished &mdash; the gap between it and the example is the assignment.</p></a>
-  </div>
+    <h2 class="sec">What you are aiming at</h2>
+    <div class="days" style="grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))">
+      <a class="day" href="example/">
+        <p class="d">The example</p>
+        <h3>Mr. Sharp&rsquo;s profile</h3>
+        <p>Built for this week so there is something to look at. Read the stylesheet &mdash; it is
+          commented and it is the whole system in 90 lines.</p>
+      </a>
+      <a class="day" href="starters/">
+        <p class="d">Your starter</p>
+        <h3>Your own words, carried over</h3>
+        <p>Everything you wrote on <i>This Is Me</i> is already in it. Not a blank file and not
+          finished &mdash; the gap between it and the example is the assignment.</p>
+      </a>
+    </div>
 
-  <h2 class="sec">What makes it professional</h2>
-  <div class="note" style="border-left-color:var(--ala-red)">
-  <b>Professional does not mean plain.</b> It means every choice looks chosen. Four tests, and the
-  page has to pass all four:<br><br>
-  &middot; <b>One system.</b> Two or three type sizes and three spacing values, used everywhere.<br>
-  &middot; <b>It reads on a phone.</b> Most people who open your link are holding one.<br>
-  &middot; <b>Movement has a reason.</b> Every animation either helps someone read or comes out.<br>
-  &middot; <b>Nothing is a placeholder.</b> No lorem ipsum, no &ldquo;Project 1&rdquo;, no dead links.
-  </div>
+    <h2 class="sec">What makes it professional</h2>
+    <div class="note" style="border-left-color:var(--ala-red)">
+      <b>Professional does not mean plain.</b> It means every choice looks chosen. Four tests, and the
+      page has to pass all four:<br><br>
+      &middot; <b>One system.</b> Two or three type sizes and three spacing values, used everywhere.<br>
+      &middot; <b>It reads on a phone.</b> Most people who open your link are holding one.<br>
+      &middot; <b>Movement has a reason.</b> Every animation either helps someone read or comes out.<br>
+      &middot; <b>Nothing is a placeholder.</b> No lorem ipsum, no &ldquo;Project 1&rdquo;, no dead links.
+    </div>
 
-  <h2 class="sec">Say what the agent did</h2>
-  <div class="term"><div class="bar">Every commit ends with one line</div>
-<pre>git commit -m "Add unit conversion helpers
+    <h2 class="sec">Say what the agent did</h2>
+    <div class="term">
+      <div class="bar">Every commit ends with one line</div>
+      <pre>git commit -m "Add unit conversion helpers
 
-<span class="hl">Agent: debug</span>"     <span class="c"># none · explain · review · debug · pair · spec</span></pre></div>
-  <div class="note">Not a gotcha &mdash; a record of how you worked, readable from the repo without
-  anyone having to ask. By June you will be able to see the week you stopped needing <b>PAIR</b>.</div>
+<span class="hl">Agent: debug</span>"     <span class="c"># none · explain · review · debug · pair · spec</span></pre>
+    </div>
+    <div class="note">Not a gotcha &mdash; a record of how you worked, readable from the repo without
+      anyone having to ask. By June you will be able to see the week you stopped needing <b>PAIR</b>.</div>
 
-  <h2 class="sec">Getting this week's files</h2>
-  <div class="term"><div class="bar">Terminal &middot; in your Codespace</div>
-<pre><span class="c"># pull the week into your own repo</span>
+    <h2 class="sec">Getting this week's files</h2>
+    <div class="term">
+      <div class="bar">Terminal &middot; in your Codespace</div>
+      <pre><span class="c"># pull the week into your own repo</span>
 npx degit coltonsharp-dev/ALA2627-ASD-Coursework/<span class="hl">app-design-2/week-07</span> profile
-cd profile</pre></div>
-  <div class="note"><b>This page is the front door, not a one-off.</b> Every project you build this
-  year hangs off it, so it is worth more care than a normal week&rsquo;s work &mdash; and it is the
-  link you will actually send to someone. <b>The page URL is what you turn in</b>, same as always.</div>
+cd profile</pre>
+    </div>
+    <div class="note"><b>This page is the front door, not a one-off.</b> Every project you build this
+      year hangs off it, so it is worth more care than a normal week&rsquo;s work &mdash; and it is the
+      link you will actually send to someone. <b>The page URL is what you turn in</b>, same as always.</div>
 
-  <footer>App Design 2 &middot; Mr. Sharp &middot; American Leadership Academy, Vistancia</footer>
-</div>
-<script src="../modes.js"></script>
+    <footer>App Design 2 &middot; Mr. Sharp &middot; American Leadership Academy, Vistancia</footer>
+  </div>
+  <script>
+    const modes = [
+      ["NONE", "I want to work it out myself.", "Keep the reply short and let me drive."],
+      ["EXPLAIN", "Teach me the idea before the code.", "Build understanding one step at a time."],
+      ["REVIEW", "Tell me what could be stronger.", "Look for risks, clarity, and missing cases."],
+      ["DEBUG", "Help me find the bug.", "Ask questions and narrow the cause without handing me the fix."],
+      ["PAIR", "Work through it with me.", "Make one small decision at a time."],
+      ["SPEC", "Turn the idea into a plan.", "Define behavior and tests before implementation."]
+    ];
+    const modeList = document.querySelector("#modes");
+    modes.forEach(([key, title, detail]) => {
+      const item = document.createElement("article");
+      item.className = "md";
+      item.innerHTML = `<div><span class="md-k">${key}</span><span class="md-t">${title}</span><small class="md-detail">${detail}</small></div><button class="md-b" type="button">Choose</button>`;
+      const button = item.querySelector("button");
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".md-b").forEach((other) => {
+          other.classList.remove("ok");
+          other.textContent = "Choose";
+          other.setAttribute("aria-pressed", "false");
+        });
+        button.classList.add("ok");
+        button.textContent = "Selected";
+        button.setAttribute("aria-pressed", "true");
+      });
+      button.setAttribute("aria-pressed", "false");
+      modeList.append(item);
+    });
+  </script>
 </body>
+
 </html>
