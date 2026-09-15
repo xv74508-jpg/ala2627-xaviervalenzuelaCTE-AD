@@ -1,3 +1,389 @@
+:root {
+  --t-hero: clamp(3.8rem, 12vw, 8.5rem);
+  --t-head: clamp(1.2rem, 2.4vw, 1.65rem);
+  --t-body: 1rem;
+  --t-small: .78rem;
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 16px;
+  --s-4: 32px;
+  --s-5: 64px;
+  --ink: #18211a;
+  --soft: #536257;
+  --faint: #718177;
+  --line: #d5e5d2;
+  --bg: #f4f8ed;
+  --card: #ffffff;
+  --accent: #e05a2a;
+  --accent-strong: #a92f4a;
+  --accent-soft: #ffe16a;
+  --display: "Trebuchet MS", sans-serif;
+  --body: "Segoe UI", sans-serif;
+}
+
+:root[data-theme="sunset"] {
+  --ink: #2d1720;
+  --soft: #79515a;
+  --faint: #986e73;
+  --line: #f0c8b5;
+  --bg: #fff4e9;
+  --card: #fffdf9;
+  --accent: #ef4f35;
+  --accent-strong: #a82759;
+  --accent-soft: #ffc857
+}
+
+:root[data-theme="ocean"] {
+  --ink: #102b3b;
+  --soft: #416979;
+  --faint: #6f8d98;
+  --line: #b9e0e4;
+  --bg: #ecfbfa;
+  --card: #fff;
+  --accent: #007f86;
+  --accent-strong: #1454a3;
+  --accent-soft: #f7c948
+}
+
+* {
+  box-sizing: border-box
+}
+
+html {
+  scroll-behavior: smooth
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: var(--t-body)/1.65 var(--body);
+  -webkit-font-smoothing: antialiased
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(125deg, var(--bg) 0%, var(--bg) 68%, var(--accent-soft) 68%, var(--accent-soft) 100%)
+}
+
+.wrap {
+  width: min(70rem, calc(100% - 48px));
+  margin: 0 auto
+}
+
+a {
+  color: inherit
+}
+
+header {
+  min-height: 84vh;
+  padding: 2rem 0 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center
+}
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem
+}
+
+.eyebrow,
+h2,
+.availability,
+.theme-picker,
+.card-number,
+.now-label {
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: var(--t-small)
+}
+
+.eyebrow span {
+  color: var(--faint);
+  margin: 0 .4rem
+}
+
+.availability {
+  color: var(--soft);
+  font-size: var(--t-small)
+}
+
+.availability span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 16%, transparent)
+}
+
+h1 {
+  max-width: 9ch;
+  margin: 0 0 1.5rem;
+  color: var(--accent-strong);
+  font: 800 var(--t-hero)/.86 var(--display);
+  letter-spacing: -.06em
+}
+
+h1 em {
+  color: var(--ink);
+  font-style: normal
+}
+
+.tagline {
+  max-width: 36rem;
+  margin: 0;
+  color: var(--soft);
+  font-size: var(--t-head);
+  line-height: 1.35
+}
+
+.theme-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  color: var(--soft);
+  font-size: var(--t-small)
+}
+
+.theme-picker span {
+  margin-right: var(--s-2)
+}
+
+.theme-button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+  font: 700 var(--t-small) var(--body);
+  transition: .2s ease
+}
+
+.theme-button:hover,
+.theme-button.is-active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff
+}
+
+.theme-button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 4px
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 5rem
+}
+
+section {
+  padding: 4rem 0;
+  border-top: 1px solid var(--line)
+}
+
+section.intro,
+section.capabilities {
+  grid-column: 1 / -1
+}
+
+h2 {
+  margin: 0 0 1.5rem;
+  color: var(--accent-strong);
+  font-size: var(--t-small)
+}
+
+p {
+  margin: 0 0 var(--s-3)
+}
+
+.intro {
+  max-width: 48rem
+}
+
+.intro .lead {
+  max-width: 42rem;
+  color: var(--ink);
+  font-size: var(--t-head);
+  line-height: 1.4
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem
+}
+
+.card {
+  min-height: 13rem;
+  padding: 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  transition: transform .2s ease, border-color .2s ease
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent)
+}
+
+.card-number {
+  display: block;
+  margin-bottom: 2.5rem;
+  color: var(--accent);
+  font: var(--t-small) var(--body)
+}
+
+.card h3 {
+  margin: 0 0 .6rem;
+  font: 700 1.2rem/1.15 var(--display)
+}
+
+.card p {
+  margin: 0;
+  color: var(--soft);
+  font-size: .92rem
+}
+
+.now-line {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line)
+}
+
+.now-line:last-child {
+  border-bottom: 0
+}
+
+.now-label {
+  color: var(--accent);
+  font-size: var(--t-small)
+}
+
+.now-line p {
+  margin: 0;
+  color: var(--soft)
+}
+
+.contact {
+  align-self: start
+}
+
+.contact p {
+  max-width: 30rem;
+  color: var(--soft)
+}
+
+.contact-note {
+  color: var(--faint) !important;
+  font-size: var(--t-small)
+}
+
+.rise {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .5s ease, transform .5s cubic-bezier(.2, .7, .3, 1)
+}
+
+.rise.in {
+  opacity: 1;
+  transform: none
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem 0 4rem;
+  color: var(--faint);
+  font-size: var(--t-small);
+  border-top: 1px solid var(--line)
+}
+
+footer span:last-child {
+  text-align: right
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto
+  }
+
+  .rise,
+  .card,
+  .theme-button {
+    opacity: 1;
+    transform: none;
+    transition: none
+  }
+}
+
+@media (max-width: 42rem) {
+  .wrap {
+    width: min(100% - 32px, 35rem)
+  }
+
+  header {
+    min-height: auto;
+    padding: 2rem 0 5rem
+  }
+
+  .hero-top {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 4rem
+  }
+
+  main {
+    display: block
+  }
+
+  .cards {
+    grid-template-columns: 1fr
+  }
+
+  .card {
+    min-height: 0
+  }
+
+  .now-line {
+    grid-template-columns: 1fr;
+    gap: .25rem
+  }
+
+  footer {
+    flex-direction: column
+  }
+
+  footer span:last-child {
+    text-align: left
+  }
+}
+
 /* ============================================================================
    Xavier Valenzuela — profile stylesheet. STARTER.
    This is the example's stylesheet, handed to you whole. Change it. The point of the week

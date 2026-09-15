@@ -10,20 +10,15 @@
 
 <body>
 
-  <!-- YOUR WORDS, CARRIED FORWARD.
-     Everything below came off your own This Is Me page. Nothing here is filler and nothing
-     is finished. Your job this week is to turn it into a page you would send to someone.
-
-     The structure is a suggestion. Move it, cut it, rename the sections. What you may NOT
-     do is leave a heading with nothing under it. -->
-
   <header class="wrap">
-    <p class="eyebrow">American Leadership Academy &middot; Vistancia</p>
-    <h1>Xavier Valenzuela</h1>
-    <p class="tagline">One sentence: what you build, or what you are becoming. Write this LAST —
-      it is the hardest line on the page.</p>
+    <div class="hero-top">
+      <p class="eyebrow">Student builder <span>/</span> Mesa, Arizona</p>
+      <div class="availability"><span></span> Learning in public</div>
+    </div>
+    <h1>Xavier<br><em>Valenzuela</em></h1>
+    <p class="tagline">I am learning to build useful web pages and repair the things that do not work.</p>
     <div class="theme-picker" aria-label="Choose a color theme">
-      <span>Theme</span>
+      <span>Color system</span>
       <button class="theme-button is-active" type="button" data-theme-choice="citrus"
         aria-pressed="true">Citrus</button>
       <button class="theme-button" type="button" data-theme-choice="sunset" aria-pressed="false">Sunset</button>
@@ -33,35 +28,69 @@
 
   <main class="wrap">
 
-    <section>
+    <section class="intro rise">
       <h2>About me</h2>
-      <p>Fifteen. Mesa, Arizona. Usually Repairing something.</p>
-      <p>I am trying to learn about creating a webpage and to understand how to create it.</p>
-      <p>I usually hang out with my family and spend time with them. I also help my family with any problems they need.
-      </p>
-      <p>I am good at reparing electronics and checking if they are functionally.</p>
+      <p class="lead">I am fifteen and live in Mesa, Arizona. I like understanding how things work, then doing something
+        useful with that knowledge.</p>
+      <p>I spend time with my family and help solve the problems that come up. I am especially interested in repairing
+        electronics and checking that they function correctly.</p>
     </section>
 
-    <section>
+    <section class="capabilities rise">
       <h2>What I can build</h2>
-      <p>You have shipped a live page already. Say what it is and link it. Add the next one here
-        when it exists — this section is the reason the page exists.</p>
+      <div class="cards">
+        <article class="card"><span class="card-number">01</span>
+          <h3>Web pages</h3>
+          <p>Responsive pages with HTML and CSS, organized so they are clear on a phone and a larger screen.</p>
+        </article>
+        <article class="card"><span class="card-number">02</span>
+          <h3>Practical repairs</h3>
+          <p>Careful troubleshooting of electronics, from finding the problem to checking the finished fix.</p>
+        </article>
+        <article class="card"><span class="card-number">03</span>
+          <h3>Problem solving</h3>
+          <p>A patient approach: understand the system, test an idea, and improve the result.</p>
+        </article>
+      </div>
     </section>
 
-    <section>
+    <section class="now rise">
       <h2>What I am working on</h2>
-      <p>Carry your <em>Right now</em> across, but written as progress rather than a snapshot.</p>
+      <div class="now-line"><span class="now-label">Right now</span>
+        <p>I am building my first professional profile and learning how structure, typography, and responsive CSS turn
+          an idea into a real page.</p>
+      </div>
+      <div class="now-line"><span class="now-label">Next</span>
+        <p>I want to keep practicing by making more pages and getting better at diagnosing electronics.</p>
+      </div>
     </section>
 
-    <section class="contact">
+    <section class="contact rise">
       <h2>Get in touch</h2>
-      <p>Your school email only. No phone number, no personal address — this page is public.</p>
+      <p>If you are connected to my school community and want to talk about a project, please reach out through American
+        Leadership Academy.</p>
+      <p class="contact-note">This page is part of App Design 2 at American Leadership Academy, Vistancia.</p>
     </section>
 
   </main>
 
-  <footer class="wrap">Built by Xavier Valenzuela &middot; App Design 2</footer>
+  <footer class="wrap"><span>Xavier Valenzuela</span><span>App Design 2 / 2026</span></footer>
   <script>
+    const sections = document.querySelectorAll('.rise');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      sections.forEach((section) => section.classList.add('in'));
+    } else {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -10% 0px' });
+      sections.forEach((section) => observer.observe(section));
+    }
+
     const themeButtons = document.querySelectorAll('[data-theme-choice]');
 
     themeButtons.forEach((button) => {
@@ -74,8 +103,12 @@
           themeButton.classList.toggle('is-active', isActive);
           themeButton.setAttribute('aria-pressed', isActive);
         });
+        localStorage.setItem('xavier-theme', theme);
       });
     });
+
+    const savedTheme = localStorage.getItem('xavier-theme');
+    if (savedTheme) document.querySelector(`[data-theme-choice="${savedTheme}"]`)?.click();
   </script>
 </body>
 
