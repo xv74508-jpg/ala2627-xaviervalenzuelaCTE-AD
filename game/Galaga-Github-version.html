@@ -187,6 +187,37 @@
       color: #fff
     }
 
+    .pause,
+    .touch-controls button {
+      border: 1px solid #496079;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer
+    }
+
+    .pause {
+      margin-left: auto;
+      padding: 3px 9px
+    }
+
+    .pause:hover,
+    .touch-controls button:active {
+      border-color: var(--cyan);
+      color: var(--cyan)
+    }
+
+    .touch-controls {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 4px
+    }
+
+    .touch-controls button {
+      min-height: 42px;
+      font-weight: 700
+    }
+
     .note {
       margin-top: 24px;
       padding: 18px;
@@ -206,6 +237,10 @@
 
       .stats {
         grid-template-columns: repeat(2, 1fr)
+      }
+
+      .touch-controls {
+        display: grid
       }
     }
   </style>
@@ -237,35 +272,43 @@
       </div>
     </section>
     <div class="help"><span><kbd>Left</kbd> <kbd>Right</kbd> Move</span><span><kbd>Space</kbd>
-        Fire</span><span><kbd>K</kbd> Skip wave</span></div>
+        Fire</span><span><kbd>K</kbd> Skip wave</span><button class="pause" id="pause" type="button">Pause</button>
+    </div>
+    <div class="touch-controls" aria-label="Touch controls"><button data-control="left" type="button">Move
+        left</button><button data-control="fire" type="button">Fire</button><button data-control="right"
+        type="button">Move right</button></div>
     <p class="note">Destroy every enemy. Mini bosses arrive on wave 4, and full bosses arrive on wave 5 and every fifth
       wave after that.</p>
   </main>
   <script>
     const canvas = document.querySelector('#game'), ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
     const $ = id => document.querySelector(id), settings = { EASY: [2, 10, 1.35], NORMAL: [3, 16, 1], HARD: [4.5, 30, .75], INSANE: [6, 80, .5] };
-    let difficulty = 'NORMAL', state = 'menu', wave = 1, score = 0, high = +localStorage.galagaHigh || 0, last = 0, player, enemies = [], particles = [], keys = new Set();
+    let difficulty = 'NORMAL', state = 'menu', paused = false, wave = 1, score = 0, high = +localStorage.galagaHigh || 0, last = 0, player, enemies = [], particles = [], keys = new Set();
     const stars = Array.from({ length: 150 }, () => ({ x: Math.random() * W, y: Math.random() * H, s: 20 + Math.random() * 60, r: 1 + Math.random() * 2 }));
     function hud() { $('score').textContent = score; $('high').textContent = high; $('wave').textContent = wave; $('lives').textContent = player?.lives || 3 }
-    function enemy(x, y, type = 'normal') { let boss = type === 'boss', mini = type === 'mini', base = settings[difficulty][1], hp = mini ? base / 2 + wave * 2 : boss ? base * .75 + wave * 3 : 1 + wave / 3; return { x, y: -40, target: y, type, r: boss ? 36 : mini ? 25 : 15, hp, max: Math.floor(hp), bullets: [], t: 0, dead: 0, hit: 0 } }
+    function enemy(x, y, type = 'normal') { let boss = type === 'boss', mini = type === 'mini', base = settings[difficulty][1], rawHp = mini ? base / 2 + wave * 2 : boss ? base * .75 + wave * 3 : 1 + wave / 3, max = Math.max(1, Math.ceil(rawHp)); return { x, y: -40, target: y, type, r: boss ? 36 : mini ? 25 : 15, hp: max, max, bullets: [], t: 0, dead: 0, hit: 0 } }
     function makeWave() { if (wave % 5 === 0) return [enemy(W / 2, 120, 'boss')]; if (wave % 4 === 0) return [enemy(W / 2, 120, 'mini')]; let list = []; for (let r = 0; r < 4; r++)for (let c = 0; c < 8; c++)list.push(enemy(145 + c * 88, 80 + r * 48)); return list }
     function burst(x, y, color = '#ff9944', count = 20) { for (let i = 0; i < count; i++) { let a = Math.random() * Math.PI * 2, s = 50 + Math.random() * 160; particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: .3 + Math.random() * .4, color }) } }
-    function start() { state = 'playing'; wave = 1; score = 0; player = { x: W / 2, y: H - 55, r: 16, lives: 3, bullets: [], cool: 0, inv: 0, dead: 0 }; enemies = makeWave(); particles = []; $('overlay').classList.add('hide'); $('status').textContent = 'In flight'; hud() }
+    function start() { state = 'playing'; paused = false; wave = 1; score = 0; player = { x: W / 2, y: H - 55, r: 16, lives: 3, bullets: [], cool: 0, inv: 0, dead: 0 }; enemies = makeWave(); particles = []; $('overlay').classList.add('hide'); $('pause').textContent = 'Pause'; $('status').textContent = 'In flight'; hud() }
     function gameOver() { state = 'over'; $('status').textContent = 'Game over'; $('title').textContent = 'Run complete'; $('message').textContent = `You scored ${score} points across ${wave} wave${wave === 1 ? '' : 's'}.`; $('launch').textContent = 'Play again'; $('overlay').classList.remove('hide') }
     function hurt() { if (player.inv > 0 || player.dead) return; player.lives--; player.dead = 1.4; burst(player.x, player.y, '#ff6685', 35); hud() }
     function update(dt) {
-      stars.forEach(s => { s.y += s.s * dt; if (s.y > H) { s.y = 0; s.x = Math.random() * W } }); if (state !== 'playing') return;
+      stars.forEach(s => { s.y += s.s * dt; if (s.y > H) { s.y = 0; s.x = Math.random() * W } }); if (state !== 'playing' || paused) return;
       if (player.dead) { player.dead -= dt; if (player.dead <= 0) { if (player.lives <= 0) return gameOver(); player.dead = 0; player.inv = 2; player.x = W / 2 } return }
       if (keys.has('ArrowLeft') || keys.has('a')) player.x -= 390 * dt; if (keys.has('ArrowRight') || keys.has('d')) player.x += 390 * dt; player.x = Math.max(18, Math.min(W - 18, player.x)); player.cool = Math.max(0, player.cool - dt); player.inv = Math.max(0, player.inv - dt); player.bullets.forEach(b => b.y -= 560 * dt); player.bullets = player.bullets.filter(b => b.y > -20);
       enemies.forEach(e => { e.t += dt; e.hit = Math.max(0, e.hit - dt); if (e.dead) { e.dead -= dt; return } if (e.y < e.target) e.y += 110 * dt; e.x += Math.sin(e.t * 2.5) * 28 * dt; let rate = settings[difficulty][2]; if (e.type === 'mini' && e.t % (1.3 * rate) < dt) { for (let i = 0; i < 6; i++) { let a = i * Math.PI * 2 / 6; e.bullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * 140, vy: Math.sin(a) * 140 }) } aim(e) } if (e.type === 'boss' && e.t % (.75 * rate) < dt) { let phase = e.hp < e.max * .35 ? 3 : e.hp < e.max * .65 ? 2 : 1, count = phase === 3 ? 10 : phase === 2 ? 4 : 8; for (let i = 0; i < count; i++) { let a = e.t * (phase === 3 ? 2 : .7) + i * Math.PI * 2 / count, s = phase === 3 ? 230 : 170; e.bullets.push({ x: e.x, y: e.y, vx: Math.cos(a) * s, vy: Math.sin(a) * s }) } if (phase > 1) aim(e) } e.bullets.forEach(b => { b.x += b.vx * dt; b.y += b.vy * dt }); e.bullets = e.bullets.filter(b => b.x > -30 && b.x < W + 30 && b.y > -30 && b.y < H + 30) });
-      player.bullets.forEach(b => enemies.forEach(e => { if (!e.dead && Math.hypot(b.x - e.x, b.y - e.y) < e.r) { b.y = -100; e.hp--; e.hit = .08; if (e.hp <= 0) { e.dead = .35; score += e.type === 'boss' ? 1000 : e.type === 'mini' ? 500 : 100; burst(e.x, e.y, e.type === 'boss' ? '#bf62ff' : '#ff9944', e.type === 'boss' ? 50 : 18); if (score > high) { high = score; localStorage.galagaHigh = high } hud() } } }));
+      player.bullets.forEach(b => enemies.forEach(e => { if (b.y >= 0 && !e.dead && Math.hypot(b.x - e.x, b.y - e.y) < e.r) { b.y = -100; e.hp--; e.hit = .08; if (e.hp <= 0) { e.dead = .35; score += e.type === 'boss' ? 1000 : e.type === 'mini' ? 500 : 100; burst(e.x, e.y, e.type === 'boss' ? '#bf62ff' : '#ff9944', e.type === 'boss' ? 50 : 18); if (score > high) { high = score; localStorage.galagaHigh = high } hud() } } }));
       enemies.forEach(e => { if (e.dead) return; if (Math.hypot(player.x - e.x, player.y - e.y) < player.r + e.r) hurt(); e.bullets.forEach(b => { if (Math.hypot(player.x - b.x, player.y - b.y) < player.r + 5) { b.y = H + 50; hurt() } }) }); enemies = enemies.filter(e => e.hp > 0 || e.dead); if (!enemies.length) { wave++; enemies = makeWave(); hud() } particles.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt }); particles = particles.filter(p => p.life > 0)
     }
     function aim(e) { let dx = player.x - e.x, dy = player.y - e.y, d = Math.hypot(dx, dy) || 1; e.bullets.push({ x: e.x, y: e.y, vx: dx / d * 230, vy: dy / d * 230 }) }
     function draw() { ctx.fillStyle = '#02040a'; ctx.fillRect(0, 0, W, H); stars.forEach(s => { ctx.fillStyle = `rgba(180,220,255,${.25 + s.r / 4})`; ctx.fillRect(s.x, s.y, s.r, s.r) }); if (player && !player.dead && (player.inv <= 0 || Math.floor(player.inv * 10) % 2)) { ctx.strokeStyle = '#5ee7ff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(player.x, player.y - 22); ctx.lineTo(player.x - 18, player.y + 20); ctx.lineTo(player.x, player.y + 12); ctx.lineTo(player.x + 18, player.y + 20); ctx.closePath(); ctx.stroke(); ctx.fillStyle = '#5ee7ff'; ctx.fillRect(player.x - 3, player.y - 5, 6, 25); player.bullets.forEach(b => { ctx.fillStyle = '#ffe45c'; ctx.fillRect(b.x - 2, b.y, 4, 13) }) } enemies.forEach(e => { if (e.dead) return; let color = e.type === 'boss' ? '#bd60ff' : e.type === 'mini' ? '#ff9944' : '#ff6685'; ctx.fillStyle = e.hit ? '#fff' : color; ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#050914'; ctx.beginPath(); ctx.arc(e.x - 7, e.y - 2, 3, 0, 7); ctx.arc(e.x + 7, e.y - 2, 3, 0, 7); ctx.fill(); e.bullets.forEach(b => { ctx.fillStyle = '#65ee7b'; ctx.beginPath(); ctx.arc(b.x, b.y, 4, 0, 7); ctx.fill() }); if (e.type !== 'normal') { ctx.fillStyle = '#471b2c'; ctx.fillRect(e.x - (e.type === 'boss' ? 70 : 45), e.y - e.r - 16, e.type === 'boss' ? 140 : 90, 6); ctx.fillStyle = '#65ee7b'; ctx.fillRect(e.x - (e.type === 'boss' ? 70 : 45), e.y - e.r - 16, (e.type === 'boss' ? 140 : 90) * e.hp / e.max, 6) } }); particles.forEach(p => { ctx.globalAlpha = Math.max(0, p.life * 2); ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, 4, 4) }); ctx.globalAlpha = 1 }
     function loop(t) { let dt = Math.min((t - last) / 1000 || 0, .04); last = t; update(dt); draw(); requestAnimationFrame(loop) }
-    $('launch').onclick = start; document.querySelectorAll('[data-difficulty]').forEach(b => b.onclick = () => { difficulty = b.dataset.difficulty; document.querySelectorAll('[data-difficulty]').forEach(x => x.classList.toggle('active', x === b)) });
-    addEventListener('keydown', e => { if (['ArrowLeft', 'ArrowRight', ' ', 'a', 'd', 'k'].includes(e.key)) e.preventDefault(); keys.add(e.key); if (e.key === ' ' && state === 'playing' && player.cool <= 0 && !player.dead) { player.bullets.push({ x: player.x, y: player.y - 20 }); player.cool = .14 } if (e.key.toLowerCase() === 'k' && state === 'playing') { wave++; enemies = makeWave(); hud() } }); addEventListener('keyup', e => keys.delete(e.key)); hud(); requestAnimationFrame(loop);
+    function togglePause() { if (state !== 'playing') return; paused = !paused; $('pause').textContent = paused ? 'Resume' : 'Pause'; $('status').textContent = paused ? 'Paused' : 'In flight' }
+    $('launch').onclick = start; $('pause').onclick = togglePause; document.querySelectorAll('[data-difficulty]').forEach(b => b.onclick = () => { difficulty = b.dataset.difficulty; document.querySelectorAll('[data-difficulty]').forEach(x => x.classList.toggle('active', x === b)) });
+    addEventListener('keydown', e => { if (['ArrowLeft', 'ArrowRight', ' ', 'a', 'd', 'k', 'p', 'P'].includes(e.key)) e.preventDefault(); keys.add(e.key); if (e.key === ' ' && state === 'playing' && !paused && player.cool <= 0 && !player.dead) { player.bullets.push({ x: player.x, y: player.y - 20 }); player.cool = .14 } if (e.key.toLowerCase() === 'k' && state === 'playing' && !paused) { wave++; enemies = makeWave(); hud() } if (e.key.toLowerCase() === 'p') togglePause() }); addEventListener('keyup', e => keys.delete(e.key));
+    document.querySelectorAll('[data-control]').forEach(button => { const control = button.dataset.control; const press = event => { event.preventDefault(); if (control === 'fire' && state === 'playing' && !paused && player.cool <= 0 && !player.dead) { player.bullets.push({ x: player.x, y: player.y - 20 }); player.cool = .14 } else if (control !== 'fire') keys.add(control === 'left' ? 'ArrowLeft' : 'ArrowRight') }; const release = () => keys.delete(control === 'left' ? 'ArrowLeft' : 'ArrowRight'); button.addEventListener('pointerdown', press); button.addEventListener('pointerup', release); button.addEventListener('pointerleave', release) });
+    addEventListener('contextmenu', event => event.preventDefault()); addEventListener('dragstart', event => event.preventDefault()); addEventListener('selectstart', event => event.preventDefault()); addEventListener('keydown', event => { if ((event.ctrlKey && ['s', 'u'].includes(event.key.toLowerCase())) || event.key === 'F12') event.preventDefault() });
+    hud(); requestAnimationFrame(loop);
   </script>
 </body>
 
