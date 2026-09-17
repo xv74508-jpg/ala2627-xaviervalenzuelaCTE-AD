@@ -386,6 +386,7 @@
         this.diving = false;
         this.scored = false;
         this.hitFlash = 0;
+        this.bossDrift = Math.random() * Math.PI * 2;
       }
 
       startDive(player) {
@@ -407,7 +408,13 @@
         this.t += 1;
         if (this.hitFlash > 0) this.hitFlash -= 1;
 
-        this.x += Math.sin(this.t * 0.05) * 2;
+        if (this.boss) {
+          this.x += Math.sin(this.t * 0.12 + this.bossDrift) * 1.7;
+          if (this.x < 80) this.x = 80;
+          if (this.x > WIDTH - 80) this.x = WIDTH - 80;
+        } else {
+          this.x += Math.sin(this.t * 0.05) * 2;
+        }
 
         if (!this.diving && Math.random() < 0.002) {
           this.startDive(player);
@@ -456,48 +463,48 @@
 
           if (phase === 1 && this.t % 60 === 0) {
             for (let i = 0; i < 8; i += 1) {
-              const angle = i * ((Math.PI * 2) / 8);
+              const angle = i * ((Math.PI * 2) / 8) + this.t * 0.05;
               this.bullets.push([
                 this.x,
                 this.y,
-                Math.cos(angle) * 3 * speedMult,
-                Math.sin(angle) * 3 * speedMult
+                Math.cos(angle) * (3.1 * speedMult),
+                Math.sin(angle) * (3.1 * speedMult)
               ]);
             }
-          } else if (phase === 2 && this.t % 20 === 0) {
-            const angle = this.t * 0.1;
-            for (let i = 0; i < 2; i += 1) {
-              const a = angle + i * Math.PI;
-              this.bullets.push([
-                this.x,
-                this.y,
-                Math.cos(a) * 4 * speedMult,
-                Math.sin(a) * 4 * speedMult
-              ]);
-            }
-          } else if (phase === 3 && this.t % 45 === 0) {
-            for (let i = 0; i < 10; i += 1) {
-              const angle = i * ((Math.PI * 2) / 10);
-              this.bullets.push([
-                this.x,
-                this.y,
-                Math.cos(angle) * 4.2 * speedMult,
-                Math.sin(angle) * 4.2 * speedMult
-              ]);
-            }
-            const dx = player.x - this.x;
-            const dy = player.y - this.y;
-            const d = Math.hypot(dx, dy) + 0.001;
-            this.bullets.push([this.x, this.y, (dx / d) * 5 * speedMult, (dy / d) * 5 * speedMult]);
-          } else if (phase === 4 && this.t % 6 === 0) {
-            const angle = this.t * 0.25;
+          } else if (phase === 2 && this.t % 18 === 0) {
+            const angle = this.t * 0.12;
             for (let i = 0; i < 3; i += 1) {
               const a = angle + i * ((Math.PI * 2) / 3);
               this.bullets.push([
                 this.x,
                 this.y,
-                Math.cos(a) * 5.5,
-                Math.sin(a) * 5.5
+                Math.cos(a) * (4.5 * speedMult),
+                Math.sin(a) * (4.5 * speedMult)
+              ]);
+            }
+          } else if (phase === 3 && this.t % 24 === 0) {
+            for (let i = 0; i < 12; i += 1) {
+              const angle = i * ((Math.PI * 2) / 12) + this.t * 0.08;
+              this.bullets.push([
+                this.x,
+                this.y,
+                Math.cos(angle) * (4.8 * speedMult),
+                Math.sin(angle) * (4.8 * speedMult)
+              ]);
+            }
+            const dx = player.x - this.x;
+            const dy = player.y - this.y;
+            const d = Math.hypot(dx, dy) + 0.001;
+            this.bullets.push([this.x, this.y, (dx / d) * (5.4 * speedMult), (dy / d) * (5.4 * speedMult)]);
+          } else if (phase === 4 && this.t % 10 === 0) {
+            const angle = this.t * 0.22;
+            for (let i = 0; i < 5; i += 1) {
+              const a = angle + i * ((Math.PI * 2) / 5);
+              this.bullets.push([
+                this.x,
+                this.y,
+                Math.cos(a) * 5.8,
+                Math.sin(a) * 5.8
               ]);
             }
 
@@ -505,7 +512,7 @@
               const dx = player.x - this.x;
               const dy = player.y - this.y;
               const d = Math.hypot(dx, dy) + 0.001;
-              this.bullets.push([this.x, this.y, (dx / d) * 6.5, (dy / d) * 6.5]);
+              this.bullets.push([this.x, this.y, (dx / d) * 7.2, (dy / d) * 7.2]);
             }
           }
         }
@@ -548,65 +555,51 @@
           ctx.fillStyle = 'rgb(80, 255, 80)';
           ctx.fillRect(this.x - barW / 2, this.y - 40, barW * ratio, 6);
         } else if (this.boss) {
-          if (currentDifficulty === 'INSANE' && this.hp < this.maxHp * 0.15) {
-            const pulse = Math.round(Math.sin(this.t * 0.3) * 8);
-            ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+          const pulse = Math.round(Math.sin(this.t * 0.25) * 8);
+          const phaseGlow = currentDifficulty === 'INSANE' && this.hp < this.maxHp * 0.15;
+
+          ctx.fillStyle = phaseGlow ? 'rgba(255, 20, 20, 0.9)' : 'rgba(30, 0, 70, 0.95)';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius + 18 + pulse, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = phaseGlow ? 'rgba(255, 255, 90, 0.95)' : 'rgba(180, 80, 255, 0.95)';
+          ctx.beginPath();
+          ctx.arc(this.x + shake, this.y, this.radius + 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = phaseGlow ? 'rgba(255, 55, 140, 0.95)' : 'rgba(80, 160, 255, 0.95)';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius - 10, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = phaseGlow ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 200, 80, 0.8)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius + 26, 0, Math.PI * 2);
+          ctx.stroke();
+
+          for (let i = 0; i < 8; i += 1) {
+            const orbit = this.t * 0.12 + i * (Math.PI / 4);
+            const px = this.x + Math.cos(orbit) * (this.radius + 22);
+            const py = this.y + Math.sin(orbit) * (this.radius + 22);
+            ctx.fillStyle = phaseGlow ? 'rgba(255,255,255,1)' : 'rgba(255, 180, 0, 1)';
             ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius + 14 + pulse, 0, Math.PI * 2);
+            ctx.arc(px, py, 4, 0, Math.PI * 2);
             ctx.fill();
-
-            ctx.fillStyle = 'rgba(255, 255, 0, 1)';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius + 4, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(255, 0, 255, 1)';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius - 10, 0, Math.PI * 2);
-            ctx.fill();
-
-            if (this.t % 6 < 3) {
-              ctx.fillStyle = 'rgba(255,255,255,1)';
-              ctx.beginPath();
-              ctx.arc(this.x, this.y, 6, 0, Math.PI * 2);
-              ctx.fill();
-            }
-
-            const barW = 140;
-            const ratio = this.hp / this.maxHp;
-            ctx.fillStyle = 'rgb(255, 80, 80)';
-            ctx.fillRect(this.x - barW / 2, this.y - 65, barW, 10);
-            ctx.fillStyle = 'rgb(80, 255, 80)';
-            ctx.fillRect(this.x - barW / 2, this.y - 65, barW * ratio, 10);
-          } else {
-            const pulse = Math.round(Math.sin(this.t * 0.15) * 5);
-            ctx.fillStyle = 'rgba(25, 0, 70, 1)';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius + 10 + pulse, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(180, 80, 255, 1)';
-            ctx.beginPath();
-            ctx.arc(this.x + shake, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(80, 160, 255, 1)';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius - 10, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(255, 80, 80, 1)';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, 6, 0, Math.PI * 2);
-            ctx.fill();
-
-            const barW = 120;
-            const ratio = this.hp / this.maxHp;
-            ctx.fillStyle = 'rgb(255, 80, 80)';
-            ctx.fillRect(this.x - barW / 2, this.y - 55, barW, 8);
-            ctx.fillStyle = 'rgb(80, 255, 80)';
-            ctx.fillRect(this.x - barW / 2, this.y - 55, barW * ratio, 8);
           }
+
+          ctx.fillStyle = phaseGlow ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 100, 100, 1)';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, 7, 0, Math.PI * 2);
+          ctx.fill();
+
+          const barW = phaseGlow ? 140 : 120;
+          const ratio = this.hp / this.maxHp;
+          ctx.fillStyle = 'rgb(255, 80, 80)';
+          ctx.fillRect(this.x - barW / 2, this.y - 60, barW, phaseGlow ? 10 : 8);
+          ctx.fillStyle = 'rgb(80, 255, 80)';
+          ctx.fillRect(this.x - barW / 2, this.y - 60, barW * ratio, phaseGlow ? 10 : 8);
         } else {
           ctx.fillStyle = 'rgb(120, 0, 0)';
           ctx.beginPath();
@@ -687,7 +680,7 @@
 
             if (enemy.hp <= 0 && !enemy.scored) {
               enemy.deadAnim = 20;
-              player.score += enemy.boss ? 500 : enemy.mini ? 250 : 100;
+              player.score += enemy.boss ? 220 : enemy.mini ? 110 : 35;
               enemy.scored = true;
             }
             break;
@@ -807,7 +800,7 @@
         }
       }
 
-      if (key === 'k' || key === 'K') {
+      if (key === 'k' || key === 'K' || key === 'f' || key === 'F') {
         if (gameState === 'playing') {
           wave += 1;
           enemies = createWave(wave);
