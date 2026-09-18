@@ -129,6 +129,7 @@
     const ctx = canvas.getContext('2d');
     const statusEl = document.getElementById('status');
     const startButton = document.getElementById('start-button');
+    const pauseButton = document.getElementById('pause-button');
     const restartButton = document.getElementById('restart-button');
     const diffButtons = [...document.querySelectorAll('.diff-btn')];
 
@@ -216,15 +217,16 @@
     }
 
     function togglePause() {
-  if (gameState !== 'playing') return;
-  isPaused = !isPaused;
+      if (gameState !== 'playing') return;
+      isPaused = !isPaused;
 
-  if (isPaused) {
-    statusEl.textContent = 'PAUSED';
-  } else {
-    statusEl.textContent = `Wave ${wave} • ${currentDifficulty}`;
-  }
-}
+      if (isPaused) {
+        statusEl.textContent = 'PAUSED';
+      } else {
+        statusEl.textContent = `Wave ${wave} • ${currentDifficulty}`;
+      }
+    }
+
     function updateParticles() {
       for (let i = particles.length - 1; i >= 0; i -= 1) {
         const p = particles[i];
@@ -631,10 +633,6 @@
       }
     }
 
-    function updateGame() {
-  if (gameState !== 'playing' || !player || isPaused) return;
-  // rest of the code
-}
     function createWave(w) {
       if (w % 4 === 0) {
         return [new Enemy(WIDTH / 2, 120, w, false, true)];
@@ -669,7 +667,7 @@
     }
 
     function updateGame() {
-      if (gameState !== 'playing' || !player) return;
+      if (gameState !== 'playing' || !player || isPaused) return;
 
       player.move();
       const result = player.update();
@@ -816,17 +814,10 @@
         }
       }
 
-      const pauseButton = document.getElementById('pause-button');
+      if (key === 'p' || key === 'P') {
+        togglePause();
+      }
 
-pauseButton.addEventListener('click', () => {
-  togglePause();
-});
-
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'p' || event.key === 'P') {
-    togglePause();
-  }
-});
       if (key === 'k' || key === 'K' || key === 'f' || key === 'F') {
         if (gameState === 'playing') {
           wave += 1;
@@ -857,6 +848,10 @@ document.addEventListener('keydown', (event) => {
       button.addEventListener('click', () => {
         setDifficulty(button.dataset.difficulty);
       });
+    });
+
+    pauseButton.addEventListener('click', () => {
+      togglePause();
     });
 
     startButton.addEventListener('click', () => {
