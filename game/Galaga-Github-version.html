@@ -230,9 +230,10 @@
     }
 
     function showAnnouncement(text, duration = 90) {
-  announcement = text;
-  announcementTimer = duration;
-  }
+      announcement = text;
+      announcementTimer = duration;
+    }
+
     function updateParticles() {
       for (let i = particles.length - 1; i >= 0; i -= 1) {
         const p = particles[i];
@@ -644,6 +645,7 @@
         return [new Enemy(WIDTH / 2, 120, w, false, true)];
       }
       if (w % 5 === 0) {
+        showAnnouncement('BOSS WAVE', 120);
         return [new Enemy(WIDTH / 2, 120, w, true, false)];
       }
 
@@ -661,6 +663,7 @@
       wave = 1;
       enemies = createWave(wave);
       gameState = 'playing';
+      showAnnouncement(`WAVE ${wave}`, 90);
       statusEl.textContent = `Wave ${wave} • ${currentDifficulty}`;
     }
 
@@ -732,6 +735,7 @@
 
       if (enemies.length === 0) {
         wave += 1;
+        showAnnouncement(`WAVE ${wave}`, 90);
         enemies = createWave(wave);
         statusEl.textContent = `Wave ${wave} • ${currentDifficulty}`;
       }
@@ -739,23 +743,6 @@
       updateParticles();
     }
 
-    if (announcementTimer > 0) {
-  announcementTimer -= 1;
-
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-  ctx.fillRect(200, 120, 500, 90);
-
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 38px Arial';
-  ctx.textAlign = 'center';
-  ctx.fillText(announcement, WIDTH / 2, 180);
-
-  ctx.textAlign = 'left';
-
-  if (announcementTimer === 0) {
-    announcement = '';
-  }
-}
     function drawHud() {
       ctx.fillStyle = 'rgba(255,255,255,0.9)';
       ctx.font = '22px Arial';
@@ -792,58 +779,49 @@
       ctx.fillText('Press R or click Restart to play again', 200, 420);
     }
 
-function draw() {
-  ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    function draw() {
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-  if (gameState === 'title') {
-    drawTitleScreen();
-    return;
-  }
+      if (gameState === 'title') {
+        drawTitleScreen();
+        return;
+      }
 
-  if (gameState === 'gameover') {
-    drawGameOver();
-    return;
-  }
+      if (gameState === 'gameover') {
+        drawGameOver();
+        return;
+      }
 
-  drawStars();
+      drawStars();
 
-  if (announcementTimer > 0) {
-    announcementTimer -= 1;
+      if (announcementTimer > 0) {
+        announcementTimer -= 1;
 
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-    ctx.fillRect(200, 120, 500, 90);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+        ctx.fillRect(200, 120, 500, 90);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 38px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(announcement, WIDTH / 2, 180);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 38px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(announcement, WIDTH / 2, 180);
 
-    ctx.textAlign = 'left';
+        ctx.textAlign = 'left';
 
-    if (announcementTimer === 0) {
-      announcement = '';
+        if (announcementTimer === 0) {
+          announcement = '';
+        }
+      }
+
+      if (player) {
+        player.draw();
+      }
+      for (const enemy of enemies) {
+        enemy.draw();
+      }
+      drawParticles();
+      drawHud();
     }
-  }
 
-  if (player) {
-    player.draw();
-  }
-  for (const enemy of enemies) {
-    enemy.draw();
-  }
-  drawParticles();
-  drawHud();
-}
-if (enemies.length === 0) {
-  wave += 1;
-  showAnnouncement(`WAVE ${wave}`, 90);
-  enemies = createWave(wave);
-  statusEl.textContent = `Wave ${wave} • ${currentDifficulty}`;
-}
-if (w % 5 === 0) {
-  showAnnouncement('BOSS WAVE', 120);
-  return [new Enemy(WIDTH / 2, 120, w, true, false)];
-}
     function updateFrame() {
       updateGame();
       draw();
