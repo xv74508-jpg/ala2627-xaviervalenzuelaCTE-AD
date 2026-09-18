@@ -631,6 +631,10 @@
       }
     }
 
+    function updateGame() {
+  if (gameState !== 'playing' || !player || isPaused) return;
+  // rest of the code
+}
     function createWave(w) {
       if (w % 4 === 0) {
         return [new Enemy(WIDTH / 2, 120, w, false, true)];
