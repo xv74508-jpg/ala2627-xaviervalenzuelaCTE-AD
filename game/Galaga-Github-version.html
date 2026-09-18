@@ -816,6 +816,17 @@
         }
       }
 
+      const pauseButton = document.getElementById('pause-button');
+
+pauseButton.addEventListener('click', () => {
+  togglePause();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'p' || event.key === 'P') {
+    togglePause();
+  }
+});
       if (key === 'k' || key === 'K' || key === 'f' || key === 'F') {
         if (gameState === 'playing') {
           wave += 1;
