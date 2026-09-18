@@ -106,6 +106,7 @@
   <div class="game-shell">
     <div class="hud">
       <div class="controls">
+        <button id="pause-button">Pause</button>
         <button id="start-button">Start Game</button>
         <button id="restart-button">Restart</button>
       </div>
@@ -156,6 +157,7 @@
     const stars = [];
     const particles = [];
 
+    let isPaused = false;
     let currentDifficulty = 'NORMAL';
     let gameState = 'title';
     let wave = 1;
@@ -213,6 +215,16 @@
       }
     }
 
+    function togglePause() {
+  if (gameState !== 'playing') return;
+  isPaused = !isPaused;
+
+  if (isPaused) {
+    statusEl.textContent = 'PAUSED';
+  } else {
+    statusEl.textContent = `Wave ${wave} • ${currentDifficulty}`;
+  }
+}
     function updateParticles() {
       for (let i = particles.length - 1; i >= 0; i -= 1) {
         const p = particles[i];
