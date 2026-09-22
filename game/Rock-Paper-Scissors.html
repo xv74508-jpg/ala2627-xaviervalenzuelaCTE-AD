@@ -21,6 +21,19 @@
       font-family: "Trebuchet MS", "Segoe UI", sans-serif;
     }
 
+    body[data-theme="vibrant"] {
+      color-scheme: light;
+      --ink: #17213b;
+      --muted: #52617d;
+      --paper: #fff4dc;
+      --card: #fffdf7;
+      --line: #e8b86b;
+      --blue: #1479a8;
+      --blue-dark: #176486;
+      --coral: #e4573d;
+      --yellow: #c57c05;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -35,6 +48,14 @@
         linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
       background-size: auto, auto, 34px 34px, 34px 34px;
+      transition: color .25s ease, background-color .25s ease;
+    }
+
+    body[data-theme="vibrant"] {
+      background-image: linear-gradient(135deg, rgba(228, 87, 61, .16), transparent 42%),
+        radial-gradient(circle at 92% 8%, rgba(20, 121, 168, .18), transparent 26rem),
+        linear-gradient(rgba(23, 33, 59, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 33, 59, .05) 1px, transparent 1px);
     }
 
     .page {
@@ -49,6 +70,12 @@
       justify-content: space-between;
       gap: 1rem;
       margin-bottom: 2rem;
+    }
+
+    .header-tools {
+      display: grid;
+      justify-items: end;
+      gap: .75rem;
     }
 
     .eyebrow {
@@ -86,15 +113,21 @@
       display: flex;
       flex-shrink: 0;
       overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(17, 31, 50, .86);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(31, 54, 82, .95), rgba(12, 24, 40, .95));
+      box-shadow: 0 14px 30px rgba(0, 0, 0, .28), inset 0 1px rgba(255, 255, 255, .12);
+    }
+
+    body[data-theme="vibrant"] .scoreboard {
+      border-color: rgba(23, 33, 59, .15);
+      background: linear-gradient(145deg, #ffffff, #fff0c8);
+      box-shadow: 0 14px 30px rgba(157, 103, 25, .18), inset 0 1px rgba(255, 255, 255, .9);
     }
 
     .score {
-      min-width: 78px;
-      padding: .8rem .9rem;
+      min-width: 100px;
+      padding: .8rem 1rem .9rem;
       text-align: center;
     }
 
@@ -104,7 +137,8 @@
 
     .score strong {
       display: block;
-      font-size: 1.8rem;
+      color: var(--ink);
+      font-size: 2.2rem;
       line-height: 1;
     }
 
@@ -114,6 +148,44 @@
       font-weight: 800;
       letter-spacing: .1em;
       text-transform: uppercase;
+    }
+
+    .score:first-child strong {
+      color: var(--blue-dark);
+    }
+
+    .score:last-child strong {
+      color: var(--coral);
+    }
+
+    .score-icon {
+      display: block;
+      margin-bottom: .35rem;
+      font-size: 1rem;
+    }
+
+    .theme-toggle {
+      padding: .5rem .75rem;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(17, 31, 50, .7);
+      font: inherit;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    body[data-theme="vibrant"] .theme-toggle {
+      background: rgba(255, 255, 255, .7);
+    }
+
+    .theme-toggle:hover,
+    .theme-toggle:focus-visible {
+      border-color: var(--coral);
+      outline: 3px solid rgba(228, 87, 61, .2);
+      outline-offset: 2px;
     }
 
     .game-card {
@@ -307,8 +379,13 @@
         display: block;
       }
 
-      .scoreboard {
+      .header-tools {
+        justify-items: start;
         margin-top: 1.25rem;
+      }
+
+      .scoreboard {
+        width: 100%;
       }
 
       .score {
@@ -350,9 +427,14 @@
         <h1>Rock, paper,<br>scissors.</h1>
         <p class="intro">Pick your move. The computer is ready, but it has no idea what you are about to throw.</p>
       </div>
-      <div class="scoreboard" aria-label="Game score">
-        <div class="score"><strong id="player-score">0</strong><span>You</span></div>
-        <div class="score"><strong id="computer-score">0</strong><span>CPU</span></div>
+      <div class="header-tools">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">☀ Vibrant mode</button>
+        <div class="scoreboard" aria-label="Game score">
+          <div class="score"><span class="score-icon" aria-hidden="true">⚡</span><strong
+              id="player-score">0</strong><span>You</span></div>
+          <div class="score"><span class="score-icon" aria-hidden="true">◈</span><strong
+              id="computer-score">0</strong><span>CPU</span></div>
+        </div>
       </div>
     </header>
 
@@ -408,6 +490,14 @@
     const roundCountElement = document.querySelector("#round-count");
     const choiceButtons = document.querySelectorAll("[data-choice]");
     const resetButton = document.querySelector("#reset-button");
+    const themeToggle = document.querySelector("#theme-toggle");
+
+    themeToggle.addEventListener("click", () => {
+      const isVibrant = document.body.dataset.theme === "vibrant";
+      document.body.dataset.theme = isVibrant ? "dark" : "vibrant";
+      themeToggle.setAttribute("aria-pressed", String(!isVibrant));
+      themeToggle.textContent = isVibrant ? "☀ Vibrant mode" : "☾ Dark mode";
+    });
 
     function getResult(playerMove, computerMove) {
       if (playerMove === computerMove) return "tie";
