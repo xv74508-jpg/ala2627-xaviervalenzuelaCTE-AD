@@ -26,22 +26,58 @@
       font-family: "Trebuchet MS", "Segoe UI", sans-serif;
     }
 
-    body[data-theme="vibrant"] {
+    body[data-theme="forest"] {
       color-scheme: light;
-      --ink: #291346;
-      --muted: #69517d;
-      --paper: #ffe9f5;
-      --card: #fff7fd;
-      --line: #d69ac7;
-      --blue: #087fa5;
-      --blue-dark: #176486;
-      --coral: #d93888;
-      --yellow: #b76b00;
-      --player-accent: #087fa5;
-      --computer-accent: #d93888;
-      --score-surface: linear-gradient(135deg, #fffaff, #ffd8eb);
-      --choice-surface: #fff0f8;
-      --arena-surface: linear-gradient(135deg, rgba(255, 188, 224, .42), rgba(183, 215, 255, .38));
+      --ink: #16352d;
+      --muted: #58786b;
+      --paper: #dff4df;
+      --card: #f7fff4;
+      --line: #9bc9a2;
+      --blue: #167d89;
+      --blue-dark: #176b65;
+      --coral: #bc4d65;
+      --yellow: #a36b08;
+      --player-accent: #087f88;
+      --computer-accent: #b8465e;
+      --score-surface: linear-gradient(135deg, #f5fff0, #c9ebca);
+      --choice-surface: #ecfaea;
+      --arena-surface: linear-gradient(135deg, rgba(142, 205, 150, .42), rgba(185, 226, 220, .5));
+    }
+
+    body[data-theme="meadow"] {
+      color-scheme: light;
+      --ink: #3c2b16;
+      --muted: #806946;
+      --paper: #fff1c9;
+      --card: #fffdf3;
+      --line: #e0bd6f;
+      --blue: #287c91;
+      --blue-dark: #286477;
+      --coral: #d35b4c;
+      --yellow: #a86d05;
+      --player-accent: #287c91;
+      --computer-accent: #d35b4c;
+      --score-surface: linear-gradient(135deg, #fffef0, #ffe0a1);
+      --choice-surface: #fff8df;
+      --arena-surface: linear-gradient(135deg, rgba(255, 215, 125, .44), rgba(175, 222, 207, .48));
+    }
+
+    body[data-theme="lagoon"] {
+      color-scheme: light;
+      --ink: #12364c;
+      --muted: #55758a;
+      --paper: #d8f5f5;
+      --card: #f4ffff;
+      --line: #8bc7ca;
+      --blue: #087da0;
+      --blue-dark: #126780;
+      --coral: #c94f75;
+      --yellow: #a86f08;
+      --player-accent: #087da0;
+      --computer-accent: #c94f75;
+      --score-surface: linear-gradient(135deg, #f4ffff, #b9e6e5);
+      --choice-surface: #eafafa;
+      --arena-surface: linear-gradient(135deg, rgba(122, 212, 212, .42), rgba(193, 215, 247, .5));
     }
 
     * {
@@ -61,11 +97,27 @@
       transition: color .25s ease, background-color .25s ease;
     }
 
-    body[data-theme="vibrant"] {
-      background-image: radial-gradient(circle at 8% 24%, rgba(217, 56, 136, .22) 0 1px, transparent 2px),
-        radial-gradient(circle at 82% 16%, rgba(8, 127, 165, .2) 0 1px, transparent 2px),
-        linear-gradient(155deg, rgba(255, 183, 213, .62), transparent 42%),
-        linear-gradient(25deg, transparent 34%, rgba(137, 178, 255, .26) 53%, transparent 72%);
+    body[data-theme="forest"] {
+      background-image: radial-gradient(circle at 8% 24%, rgba(49, 130, 78, .3) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 16%, rgba(15, 117, 126, .24) 0 1px, transparent 2px),
+        linear-gradient(155deg, rgba(151, 218, 143, .62), transparent 42%),
+        linear-gradient(25deg, transparent 34%, rgba(94, 178, 147, .3) 53%, transparent 72%);
+      background-size: 97px 83px, 131px 107px, auto, auto;
+    }
+
+    body[data-theme="meadow"] {
+      background-image: radial-gradient(circle at 8% 24%, rgba(219, 151, 45, .3) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 16%, rgba(35, 135, 145, .22) 0 1px, transparent 2px),
+        linear-gradient(155deg, rgba(255, 215, 125, .66), transparent 42%),
+        linear-gradient(25deg, transparent 34%, rgba(142, 205, 168, .34) 53%, transparent 72%);
+      background-size: 97px 83px, 131px 107px, auto, auto;
+    }
+
+    body[data-theme="lagoon"] {
+      background-image: radial-gradient(circle at 8% 24%, rgba(12, 131, 153, .28) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 16%, rgba(79, 112, 205, .24) 0 1px, transparent 2px),
+        linear-gradient(155deg, rgba(119, 224, 218, .6), transparent 42%),
+        linear-gradient(25deg, transparent 34%, rgba(143, 181, 241, .32) 53%, transparent 72%);
       background-size: 97px 83px, 131px 107px, auto, auto;
     }
 
@@ -86,6 +138,17 @@
     .header-tools {
       display: flex;
       justify-content: flex-end;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     .eyebrow {
@@ -184,11 +247,12 @@
       background: linear-gradient(180deg, rgba(255, 123, 213, .13), transparent 70%);
     }
 
-    .theme-toggle {
-      padding: .5rem .75rem;
+    .theme-select {
+      min-width: 190px;
+      padding: .6rem .8rem;
       cursor: pointer;
       border: 1px solid rgba(112, 231, 255, .5);
-      border-radius: 999px;
+      border-radius: 12px;
       color: var(--ink);
       background: rgba(27, 20, 62, .78);
       font: inherit;
@@ -198,14 +262,16 @@
       box-shadow: 0 0 18px rgba(112, 231, 255, .1);
     }
 
-    body[data-theme="vibrant"] .theme-toggle {
-      border-color: rgba(217, 56, 136, .5);
-      background: rgba(255, 247, 253, .82);
-      box-shadow: 0 0 18px rgba(217, 56, 136, .14);
+    body[data-theme="forest"] .theme-select,
+    body[data-theme="meadow"] .theme-select,
+    body[data-theme="lagoon"] .theme-select {
+      border-color: var(--line);
+      background: rgba(255, 255, 255, .72);
+      box-shadow: 0 0 18px rgba(31, 125, 128, .14);
     }
 
-    .theme-toggle:hover,
-    .theme-toggle:focus-visible {
+    .theme-select:hover,
+    .theme-select:focus-visible {
       border-color: var(--coral);
       outline: 3px solid color-mix(in srgb, var(--coral) 22%, transparent);
       outline-offset: 2px;
@@ -481,7 +547,15 @@
         <p class="intro">Pick your move. The computer is ready, but it has no idea what you are about to throw.</p>
       </div>
       <div class="header-tools">
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">☀ Vibrant mode</button>
+        <label class="theme-choice" for="theme-select">
+          <span class="sr-only">Choose a magical setting</span>
+          <select class="theme-select" id="theme-select" aria-label="Choose a magical setting">
+            <option value="standard">Standard midnight</option>
+            <option value="forest">Moonlit forest</option>
+            <option value="meadow">Enchanted meadow</option>
+            <option value="lagoon">Twilight lagoon</option>
+          </select>
+        </label>
       </div>
     </header>
 
@@ -546,15 +620,23 @@
     const roundCountElement = document.querySelector("#round-count");
     const choiceButtons = document.querySelectorAll("[data-choice]");
     const resetButton = document.querySelector("#reset-button");
-    const themeToggle = document.querySelector("#theme-toggle");
+    const themeSelect = document.querySelector("#theme-select");
     const themeColor = document.querySelector('meta[name="theme-color"]');
 
-    themeToggle.addEventListener("click", () => {
-      const isVibrant = document.body.dataset.theme === "vibrant";
-      document.body.dataset.theme = isVibrant ? "dark" : "vibrant";
-      themeToggle.setAttribute("aria-pressed", String(!isVibrant));
-      themeToggle.textContent = isVibrant ? "☀ Vibrant mode" : "☾ Dark mode";
-      themeColor.setAttribute("content", isVibrant ? "#09071a" : "#ffe9f5");
+    themeSelect.addEventListener("change", () => {
+      const selectedTheme = themeSelect.value;
+      if (selectedTheme === "standard") {
+        delete document.body.dataset.theme;
+        themeColor.setAttribute("content", "#09071a");
+        return;
+      }
+      document.body.dataset.theme = selectedTheme;
+      const themeColors = {
+        forest: "#dff4df",
+        meadow: "#fff1c9",
+        lagoon: "#d8f5f5"
+      };
+      themeColor.setAttribute("content", themeColors[selectedTheme]);
     });
 
     function getResult(playerMove, computerMove) {
