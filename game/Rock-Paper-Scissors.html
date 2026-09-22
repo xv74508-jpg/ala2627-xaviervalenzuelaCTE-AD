@@ -18,6 +18,9 @@
       --blue-dark: #9ddcf2;
       --coral: #ff856d;
       --yellow: #f4c95d;
+      --player-accent: #55d6ff;
+      --computer-accent: #ff8f78;
+      --score-surface: linear-gradient(135deg, #172d49, #0c1b2f);
       font-family: "Trebuchet MS", "Segoe UI", sans-serif;
     }
 
@@ -32,6 +35,9 @@
       --blue-dark: #176486;
       --coral: #e4573d;
       --yellow: #c57c05;
+      --player-accent: #087ea4;
+      --computer-accent: #d64232;
+      --score-surface: linear-gradient(135deg, #fffdf3, #ffe6a8);
     }
 
     * {
@@ -73,9 +79,8 @@
     }
 
     .header-tools {
-      display: grid;
-      justify-items: end;
-      gap: .75rem;
+      display: flex;
+      justify-content: flex-end;
     }
 
     .eyebrow {
@@ -111,18 +116,12 @@
 
     .scoreboard {
       display: flex;
-      flex-shrink: 0;
+      width: min(100%, 440px);
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, .18);
+      border: 1px solid var(--line);
       border-radius: 14px;
-      background: linear-gradient(145deg, rgba(31, 54, 82, .95), rgba(12, 24, 40, .95));
+      background: var(--score-surface);
       box-shadow: 0 14px 30px rgba(0, 0, 0, .28), inset 0 1px rgba(255, 255, 255, .12);
-    }
-
-    body[data-theme="vibrant"] .scoreboard {
-      border-color: rgba(23, 33, 59, .15);
-      background: linear-gradient(145deg, #ffffff, #fff0c8);
-      box-shadow: 0 14px 30px rgba(157, 103, 25, .18), inset 0 1px rgba(255, 255, 255, .9);
     }
 
     .score {
@@ -151,11 +150,11 @@
     }
 
     .score:first-child strong {
-      color: var(--blue-dark);
+      color: var(--player-accent);
     }
 
     .score:last-child strong {
-      color: var(--coral);
+      color: var(--computer-accent);
     }
 
     .score-icon {
@@ -194,8 +193,27 @@
       padding: clamp(1.25rem, 4vw, 2.6rem);
       border: 1px solid var(--line);
       border-radius: 16px;
-      background: rgba(17, 31, 50, .94);
+      background: var(--card);
       box-shadow: 0 20px 45px rgba(0, 0, 0, .3);
+    }
+
+    .scoreboard-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .scoreboard-heading {
+      margin: 0;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
     }
 
     .game-card::before {
@@ -388,6 +406,11 @@
         width: 100%;
       }
 
+      .scoreboard-panel {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
       .score {
         flex: 1;
       }
@@ -429,6 +452,12 @@
       </div>
       <div class="header-tools">
         <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">☀ Vibrant mode</button>
+      </div>
+    </header>
+
+    <section class="game-card" aria-labelledby="game-status">
+      <div class="scoreboard-panel">
+        <p class="scoreboard-heading">Match score</p>
         <div class="scoreboard" aria-label="Game score">
           <div class="score"><span class="score-icon" aria-hidden="true">⚡</span><strong
               id="player-score">0</strong><span>You</span></div>
@@ -436,9 +465,6 @@
               id="computer-score">0</strong><span>CPU</span></div>
         </div>
       </div>
-    </header>
-
-    <section class="game-card" aria-labelledby="game-status">
       <div class="arena" aria-live="polite">
         <div class="fighter">
           <div class="fighter-label">Your move</div>
@@ -491,12 +517,14 @@
     const choiceButtons = document.querySelectorAll("[data-choice]");
     const resetButton = document.querySelector("#reset-button");
     const themeToggle = document.querySelector("#theme-toggle");
+    const themeColor = document.querySelector('meta[name="theme-color"]');
 
     themeToggle.addEventListener("click", () => {
       const isVibrant = document.body.dataset.theme === "vibrant";
       document.body.dataset.theme = isVibrant ? "dark" : "vibrant";
       themeToggle.setAttribute("aria-pressed", String(!isVibrant));
       themeToggle.textContent = isVibrant ? "☀ Vibrant mode" : "☾ Dark mode";
+      themeColor.setAttribute("content", isVibrant ? "#08111f" : "#fff4dc");
     });
 
     function getResult(playerMove, computerMove) {
