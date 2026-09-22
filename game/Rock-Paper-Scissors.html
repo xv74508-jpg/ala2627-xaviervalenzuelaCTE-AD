@@ -4,40 +4,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#08111f">
+  <meta name="theme-color" content="#09071a">
   <title>Rock Paper Scissors</title>
   <style>
     :root {
       color-scheme: dark;
-      --ink: #f3f7fb;
-      --muted: #9fb3c8;
-      --paper: #08111f;
-      --card: #111f32;
-      --line: #29415b;
-      --blue: #43b5e6;
-      --blue-dark: #9ddcf2;
-      --coral: #ff856d;
-      --yellow: #f4c95d;
-      --player-accent: #55d6ff;
-      --computer-accent: #ff8f78;
-      --score-surface: linear-gradient(135deg, #172d49, #0c1b2f);
+      --ink: #f7f1ff;
+      --muted: #b7add3;
+      --paper: #09071a;
+      --card: #12102a;
+      --line: #453b70;
+      --blue: #70e7ff;
+      --blue-dark: #a4efff;
+      --coral: #ff7bd5;
+      --yellow: #ffd166;
+      --player-accent: #70e7ff;
+      --computer-accent: #ff7bd5;
+      --score-surface: linear-gradient(135deg, rgba(37, 35, 91, .96), rgba(20, 13, 48, .98));
+      --choice-surface: #1c1740;
+      --arena-surface: linear-gradient(135deg, rgba(65, 46, 133, .28), rgba(20, 12, 54, .52));
       font-family: "Trebuchet MS", "Segoe UI", sans-serif;
     }
 
     body[data-theme="vibrant"] {
       color-scheme: light;
-      --ink: #17213b;
-      --muted: #52617d;
-      --paper: #fff4dc;
-      --card: #fffdf7;
-      --line: #e8b86b;
-      --blue: #1479a8;
+      --ink: #291346;
+      --muted: #69517d;
+      --paper: #ffe9f5;
+      --card: #fff7fd;
+      --line: #d69ac7;
+      --blue: #087fa5;
       --blue-dark: #176486;
-      --coral: #e4573d;
-      --yellow: #c57c05;
-      --player-accent: #087ea4;
-      --computer-accent: #d64232;
-      --score-surface: linear-gradient(135deg, #fffdf3, #ffe6a8);
+      --coral: #d93888;
+      --yellow: #b76b00;
+      --player-accent: #087fa5;
+      --computer-accent: #d93888;
+      --score-surface: linear-gradient(135deg, #fffaff, #ffd8eb);
+      --choice-surface: #fff0f8;
+      --arena-surface: linear-gradient(135deg, rgba(255, 188, 224, .42), rgba(183, 215, 255, .38));
     }
 
     * {
@@ -49,19 +53,20 @@
       min-height: 100vh;
       color: var(--ink);
       background: var(--paper);
-      background-image: linear-gradient(135deg, rgba(255, 133, 109, .09), transparent 42%),
-        radial-gradient(circle at 92% 8%, rgba(67, 181, 230, .14), transparent 26rem),
-        linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
-      background-size: auto, auto, 34px 34px, 34px 34px;
+      background-image: radial-gradient(circle at 12% 18%, rgba(112, 231, 255, .2) 0 1px, transparent 2px),
+        radial-gradient(circle at 84% 28%, rgba(255, 123, 213, .24) 0 1px, transparent 2px),
+        linear-gradient(155deg, rgba(106, 67, 197, .2), transparent 36%),
+        linear-gradient(25deg, transparent 35%, rgba(255, 123, 213, .1) 52%, transparent 70%);
+      background-size: 97px 83px, 131px 107px, auto, auto;
       transition: color .25s ease, background-color .25s ease;
     }
 
     body[data-theme="vibrant"] {
-      background-image: linear-gradient(135deg, rgba(228, 87, 61, .16), transparent 42%),
-        radial-gradient(circle at 92% 8%, rgba(20, 121, 168, .18), transparent 26rem),
-        linear-gradient(rgba(23, 33, 59, .05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(23, 33, 59, .05) 1px, transparent 1px);
+      background-image: radial-gradient(circle at 8% 24%, rgba(217, 56, 136, .22) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 16%, rgba(8, 127, 165, .2) 0 1px, transparent 2px),
+        linear-gradient(155deg, rgba(255, 183, 213, .62), transparent 42%),
+        linear-gradient(25deg, transparent 34%, rgba(137, 178, 255, .26) 53%, transparent 72%);
+      background-size: 97px 83px, 131px 107px, auto, auto;
     }
 
     .page {
@@ -118,27 +123,33 @@
       display: flex;
       width: min(100%, 440px);
       overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 18px;
       background: var(--score-surface);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, .28), inset 0 1px rgba(255, 255, 255, .12);
+      box-shadow: 0 0 0 1px rgba(112, 231, 255, .08), 0 16px 34px rgba(5, 2, 20, .3),
+        inset 0 1px rgba(255, 255, 255, .22);
+      isolation: isolate;
     }
 
     .score {
+      position: relative;
+      flex: 1;
       min-width: 100px;
-      padding: .8rem 1rem .9rem;
+      padding: 1rem 1.25rem 1.1rem;
       text-align: center;
     }
 
     .score+.score {
-      border-left: 1px solid var(--line);
+      border-left: 1px solid rgba(255, 255, 255, .16);
     }
 
     .score strong {
       display: block;
       color: var(--ink);
-      font-size: 2.2rem;
+      font-family: Georgia, serif;
+      font-size: 2.7rem;
       line-height: 1;
+      text-shadow: 0 0 18px currentColor;
     }
 
     .score span {
@@ -159,31 +170,44 @@
 
     .score-icon {
       display: block;
-      margin-bottom: .35rem;
-      font-size: 1rem;
+      margin-bottom: .45rem;
+      color: var(--muted);
+      font-size: 1.15rem;
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+
+    .score:first-child {
+      background: linear-gradient(180deg, rgba(112, 231, 255, .13), transparent 70%);
+    }
+
+    .score:last-child {
+      background: linear-gradient(180deg, rgba(255, 123, 213, .13), transparent 70%);
     }
 
     .theme-toggle {
       padding: .5rem .75rem;
       cursor: pointer;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(112, 231, 255, .5);
       border-radius: 999px;
       color: var(--ink);
-      background: rgba(17, 31, 50, .7);
+      background: rgba(27, 20, 62, .78);
       font: inherit;
       font-size: .78rem;
       font-weight: 800;
       letter-spacing: .04em;
+      box-shadow: 0 0 18px rgba(112, 231, 255, .1);
     }
 
     body[data-theme="vibrant"] .theme-toggle {
-      background: rgba(255, 255, 255, .7);
+      border-color: rgba(217, 56, 136, .5);
+      background: rgba(255, 247, 253, .82);
+      box-shadow: 0 0 18px rgba(217, 56, 136, .14);
     }
 
     .theme-toggle:hover,
     .theme-toggle:focus-visible {
       border-color: var(--coral);
-      outline: 3px solid rgba(228, 87, 61, .2);
+      outline: 3px solid color-mix(in srgb, var(--coral) 22%, transparent);
       outline-offset: 2px;
     }
 
@@ -194,7 +218,7 @@
       border: 1px solid var(--line);
       border-radius: 16px;
       background: var(--card);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, .3);
+      box-shadow: 0 24px 55px rgba(5, 2, 20, .35), 0 0 0 1px rgba(255, 255, 255, .04);
     }
 
     .scoreboard-panel {
@@ -216,6 +240,12 @@
       text-transform: uppercase;
     }
 
+    .scoreboard-heading::before {
+      margin-right: .45rem;
+      color: var(--yellow);
+      content: "✦";
+    }
+
     .game-card::before {
       position: absolute;
       top: 0;
@@ -235,7 +265,7 @@
       padding: 1rem;
       border: 1px solid var(--line);
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(67, 181, 230, .08), rgba(255, 133, 109, .05));
+      background: var(--arena-surface);
     }
 
     .fighter {
@@ -314,7 +344,7 @@
       border: 2px solid var(--line);
       border-radius: 10px;
       color: var(--ink);
-      background: #172940;
+      background: var(--choice-surface);
       font: inherit;
       transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
@@ -524,7 +554,7 @@
       document.body.dataset.theme = isVibrant ? "dark" : "vibrant";
       themeToggle.setAttribute("aria-pressed", String(!isVibrant));
       themeToggle.textContent = isVibrant ? "☀ Vibrant mode" : "☾ Dark mode";
-      themeColor.setAttribute("content", isVibrant ? "#08111f" : "#fff4dc");
+      themeColor.setAttribute("content", isVibrant ? "#09071a" : "#ffe9f5");
     });
 
     function getResult(playerMove, computerMove) {
