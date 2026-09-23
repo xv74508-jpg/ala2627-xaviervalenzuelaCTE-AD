@@ -295,7 +295,7 @@
       shoot() {
         if (this.cooldown === 0 && !this.dead) {
           this.bullets.push([this.x, this.y]);
-          this.cooldown = 8;
+          this.cooldown = Math.ceil(8 * settings[currentDifficulty].fire_rate);
         }
       }
 
@@ -679,7 +679,7 @@
       if (gameState !== 'playing' || !player || isPaused) return;
 
       player.move();
-      if (keys[' ']) player.shoot();
+      if (keys.Space) player.shoot();
       const result = player.update();
       if (result === 'GAME_OVER') {
         saveHighScore(player.score);
@@ -832,9 +832,10 @@
     document.addEventListener('keydown', (event) => {
       const key = event.key;
       keys[key] = true;
+      keys[event.code] = true;
       keys[event.keyCode] = true;
 
-      if (key === ' ') {
+      if (event.code === 'Space') {
         event.preventDefault();
         if (gameState === 'title') {
           startGame();
@@ -868,6 +869,7 @@
     document.addEventListener('keyup', (event) => {
       const key = event.key;
       keys[key] = false;
+      keys[event.code] = false;
       keys[event.keyCode] = false;
     });
 
