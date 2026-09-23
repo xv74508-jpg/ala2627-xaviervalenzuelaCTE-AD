@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  if (keys[' ']) player.shoot();
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Galaga Final Max</title>
   <style>
@@ -837,8 +838,6 @@
         event.preventDefault();
         if (gameState === 'title') {
           startGame();
-        } else if (gameState === 'playing') {
-          handlePlayerShoot();
         }
       }
 
