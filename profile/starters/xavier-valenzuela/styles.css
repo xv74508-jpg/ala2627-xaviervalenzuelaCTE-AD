@@ -708,3 +708,55 @@ footer {
     padding-top: 1.5rem
   }
 }
+.toolkit {
+  grid-column: 1 / -1;
+}
+
+.section-intro {
+  max-width: 38rem;
+  color: var(--soft);
+}
+
+.toolkit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 2rem;
+}
+
+.tool-item {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.tool-icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  color: var(--accent-strong);
+  font: 700 0.75rem var(--body);
+  letter-spacing: 0.08em;
+}
+
+.tool-item h3 {
+  margin: 0 0 0.35rem;
+  font: 700 1.05rem/1.2 var(--display);
+}
+
+.tool-item p {
+  margin: 0;
+  color: var(--soft);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 42rem) {
+  .toolkit-grid {
+    grid-template-columns: 1fr;
+  }
+}
