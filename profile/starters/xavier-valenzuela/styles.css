@@ -613,9 +613,15 @@ p:last-child {
 }
 
 .card {
+  display: flex;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
+  padding: 0
+}
+
+.card-link {
+  flex: 1;
   padding: var(--s-3)
 }
 
@@ -708,6 +714,7 @@ footer {
     padding-top: 1.5rem
   }
 }
+
 .toolkit {
   grid-column: 1 / -1;
 }
